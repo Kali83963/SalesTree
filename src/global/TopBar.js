@@ -9,19 +9,30 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useState } from 'react';
+import { ChevronDoubleDownIcon, ChevronDoubleLeftIcon, ChevronDownIcon, ChevronLeftIcon, ChevronUpIcon, Cog6ToothIcon, PowerIcon, UserIcon } from '@heroicons/react/24/outline';
+import { Link, NavLink } from 'react-router-dom';
 
 const userDropDownList = [
     {
+        'id':Math.random().toFixed(2),
         'name':'Profile',
-        'icon': <PersonOutlineOutlinedIcon />
+        'icon':<Link >
+            <UserIcon className='h-6 text-primary' />
+        </Link> 
     },
     {
+        'id':Math.random().toFixed(2),
         'name':'Settings',
-        'icon': <SettingsOutlinedIcon />
+        'icon':<Link >
+            <Cog6ToothIcon className='h-6 text-primary' />
+        </Link> 
     },
     {
+        'id':Math.random().toFixed(2),
         'name':'Log Out',
-        'icon': <LogoutOutlinedIcon />
+        'icon':<button>
+            <PowerIcon className='h-6 text-primary'/>
+        </button> 
     },
 ]
 
@@ -44,7 +55,7 @@ const notification = [
 ]
 
 
-const TopBar = () =>{
+function TopBar(){
 
     const [isUserDropDownOpen,setUserDropDown] = useState(false);
     const [isNotificationOpen,setNotificationOpen] = useState(false);
@@ -69,55 +80,55 @@ const TopBar = () =>{
     }
 
     return(
-        <div className="topbar">
-            <span className='topbar-arrow'>
-
-                <KeyboardDoubleArrowLeftIcon />
+        <header className="p-2 bg-white flex items-center justify-between">
+            <span className='text-white bg-primary flex items-center justify-center cursor-pointer rounded-full p-1'>
+                <ChevronDoubleLeftIcon className="h-4"/>
             </span>
             <div className='topbar-right'>
-                <span className='topbar-icon'>
+                {/* <span className='topbar-icon'>
                     <EmailOutlinedIcon />
                 </span>
                 <span className='topbar-icon'>
                     <NotificationsNoneOutlinedIcon onClick={handleNotificationDropDown} />
-                    <span className='notification-no'>1</span>
+                    { notifications.length > 0 && <span className='notification-no'>{notifications.length}</span> }
+
+                    
                    { isNotificationOpen && <DropDown messages = {notifications} onRemove={handleRemoveNotification} onClear ={handleClearNotifications}/>}
                    
-                </span>
-                <div className='profile'>
-                    <div className='image-container'>
-                        <img src={profileimage} alt='profile-image' />
+                </span> */}
+                <div className='flex items-center gap-2'>
+                    <div className='h-11 w-11 overflow-hidden rounded-full'>
+                        <img src={profileimage} alt="user-profile"  className='w-full h-full object-cover'/>
                     </div>
-                    <div className='profile-info'>
-                        <p>
-                            <span>John Doe</span>
+                    <div className='flex flex-col   relative text-start text-sm font-semibold'>
+                       <div className='flex gap-1 items-center'>
+                            <span>John Doe</span> 
                             {
-                                isUserDropDownOpen ? <span onClick={handleUserDropDown}><KeyboardArrowUpOutlinedIcon /></span> : <span onClick={handleUserDropDown}><KeyboardArrowDownOutlinedIcon /></span>
+                                isUserDropDownOpen ? <ChevronUpIcon className='cursor-pointer h-4' onClick={handleUserDropDown}/> : <ChevronDownIcon className='cursor-pointer h-4' onClick={handleUserDropDown} />
                             }
-                            
-                        </p>
-                        <span className='user-role'>Super Admin</span>
-                        { isUserDropDownOpen && <UserDropDown DropDownList = {userDropDownList} />}
+                       </div>
+                        <span className='text-xs font-normal'>Super Admin</span>
+                        { isUserDropDownOpen && <UserDropDown list = {userDropDownList} />}
                     </div>
                 </div>
             </div>
-        </div>
+        </header>
     )
 };
 
 export default TopBar;
 
 
-function UserDropDown({DropDownList}){
+function UserDropDown({list}){
     return(
-        <div className='user-dropdown'>
+        <div className='absolute top-8 right-0 z-50 flex flex-col gap-1 bg-white px-8 text-sm py-2 rounded-md shadow-md'>
             {
-            DropDownList.map((item)=>
+            list.map((item)=>
                 
-                <a href='#' className='user-dropdown-item'>
+                <li className='flex items-start justify-center gap-1 text-[#313131] font-normal' key={item.id}>
                     {item.icon}
                     <span>{item.name}</span>
-                </a>
+                </li>
               
             )}
 
@@ -134,7 +145,7 @@ function DropDown({messages,onRemove,onClear}){
         <div className='dropdown'>
             <p>
                 <span>Notifications</span>
-                { isMessages && <a onClick={onClear}>Clear all</a> }
+                { isMessages && <button onClick={onClear}>Clear all</button> }
                 
 
             </p>
@@ -143,7 +154,9 @@ function DropDown({messages,onRemove,onClear}){
                 {isMessages ? 
 
                     messages.map( message=> (
-                    <li key={message.id}>
+                    <li key={message.id}
+                    
+                        >
                         <div className='image-container'>
                             <img src={message.profile} alt='profile-image' />
                         </div>
