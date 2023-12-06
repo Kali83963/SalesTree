@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Controller } from "react-hook-form";
@@ -8,7 +8,6 @@ function classNames(...classes) {
 }
 
 function SelectInput({ data, control, name }) {
-  const [selected, setSelected] = useState("");
 
   var dataList;
   if (!Array.isArray(data)) {

@@ -57,10 +57,12 @@ input[type=number] {
   background-color: #999; 
   width: 11px;
 }
-main{
+/* main{
   width: calc(100% - 220px);
   margin-left: 220px;
-}
+} */
+
+
 
 
 

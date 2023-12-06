@@ -1,6 +1,5 @@
 import './App.css';
-import TopBar from './global/TopBar';
-import SideBar from './global/SideBar';
+
 
 import { Routes,Route, useNavigate } from 'react-router-dom';
 import { MainRouter } from './pages/dashboard/MainRouter';
@@ -29,7 +28,7 @@ function App() {
 
   if(isAutenticated === null){
     return(
-      <div className='App'>
+      <div className='h-screen'>
         
           <Routes>
               <Route path='/account/*' element={<AccountRouter />} />

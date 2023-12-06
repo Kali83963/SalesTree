@@ -11,12 +11,12 @@ import ConfirmDelete from "../../global/ConfirmDelete";
 
 
 const columns= [
-    { field: 'customer_name', headerName: 'Customer Name', width: 500 ,
+    { field: 'customer_name', headerName: 'Customer Name', flex:1 ,
       renderCell:(params) => (
        <span>{params.row.supplier_name}</span>
       )
     },
-    { field: 'phone_no', headerName: 'Contact Number', width:550,
+    { field: 'phone_no', headerName: 'Contact Number', flex:1,
       renderCell:(params) =>(
         <span>{params.row.phone_no}</span>
       )

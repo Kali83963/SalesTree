@@ -9,8 +9,10 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useState } from 'react';
-import { ChevronDoubleDownIcon, ChevronDoubleLeftIcon, ChevronDownIcon, ChevronLeftIcon, ChevronUpIcon, Cog6ToothIcon, PowerIcon, UserIcon } from '@heroicons/react/24/outline';
+import { ChevronDoubleDownIcon, ChevronDoubleLeftIcon, ChevronDoubleRightIcon, ChevronDownIcon, ChevronLeftIcon, ChevronUpIcon, Cog6ToothIcon, PowerIcon, UserIcon } from '@heroicons/react/24/outline';
 import { Link, NavLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleSidebar } from '../globalslice';
 
 const userDropDownList = [
     {
@@ -59,7 +61,11 @@ function TopBar(){
 
     const [isUserDropDownOpen,setUserDropDown] = useState(false);
     const [isNotificationOpen,setNotificationOpen] = useState(false);
-    const [notifications,setNotifications] = useState(notification)
+    const [notifications,setNotifications] = useState(notification);
+
+    const sidebarShow = useSelector(state => state.global.sidebarShow);
+
+    const dispatch = useDispatch();
 
     function handleUserDropDown(){
         setUserDropDown(DropDown => !DropDown);
@@ -81,9 +87,14 @@ function TopBar(){
 
     return(
         <header className="p-2 bg-white flex items-center justify-between">
-            <span className='text-white bg-primary flex items-center justify-center cursor-pointer rounded-full p-1'>
-                <ChevronDoubleLeftIcon className="h-4"/>
-            </span>
+            <button className='text-white bg-primary flex items-center justify-center cursor-pointer rounded-full p-1' onClick={()=>dispatch(toggleSidebar(!sidebarShow))}>
+                {
+                    sidebarShow ?
+                    <ChevronDoubleLeftIcon className="h-4"/>
+                    :
+                    <ChevronDoubleRightIcon className='h-4' />
+                }
+            </button>
             <div className='topbar-right'>
                 {/* <span className='topbar-icon'>
                     <EmailOutlinedIcon />

@@ -11,26 +11,26 @@ import ConfirmDelete from '../../global/ConfirmDelete';
 
 
 const columns= [
-    { field: 'profile_image', headerName: 'Profile Image', width: 130 ,sortable:false,
+    { field: 'profile_image', headerName: 'Profile Image', flex: 1,sortable:false,
       renderCell:(params) => (
         <div className='h-11 w-11 overflow-hidden rounded-full'>
             <img src={params.row.profile_image} alt={params.row.id} className='w-full h-full object-cover'/>
         </div>
       )
     },
-    { field: 'username', headerName: 'Username', width:120,
+    { field: 'username', headerName: 'Username',flex: 1,
       renderCell:(params) =>(
         <span>{params.row.username}</span>
       )
     },
-    { field: 'email', headerName: 'Email Address',width:250 ,
+    { field: 'email', headerName: 'Email Address',flex: 1,
         renderCell:(params)=>(
             <span>{params.row.email}</span>
         )
     },
     {
       field: 'phone_no',
-      headerName: 'Phone Number', width:150,
+      headerName: 'Phone Number', flex: 1,
       renderCell: (params) => (
         <span>{params.row.phone_no}</span>
       ),
@@ -38,7 +38,7 @@ const columns= [
     {
       field: 'role',
       headerName: 'Role',
-      width:200,
+      flex: 1,
       renderCell: (params) => (
         <span>{params.row.role}</span>
       ),
@@ -46,7 +46,7 @@ const columns= [
     {
       field: 'location',
       headerName: 'Location',
-      width: 100,
+      flex: 1,
       renderCell: (params) => (
         <span>{params.row.location}</span>
       ),

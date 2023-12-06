@@ -67,7 +67,7 @@ function AddUserForm({ data, onAddUser }) {
         </div>
 
         <div className="bg-white rounded-md mt-6 p-5 shadow-md">
-          <form className="w-full grid grid-cols-4 gap-4" onSubmit={handleSubmit(onSubmitLogin)}>
+          <form className="w-full grid md:grid-cols-2 lg:grid-cols-4 gap-4" onSubmit={handleSubmit(onSubmitLogin)}>
             <div className="flex flex-col items-start justify-start gap-1 mt-5">
               <label
                 htmlFor="name"
@@ -80,7 +80,7 @@ function AddUserForm({ data, onAddUser }) {
                   id="name"
                   type="text"
                   placeholder="Full Name"
-                  className="bg-[#F5F7F9] p-3 text-sm border-[#E5E5E5] rounded-md w-full outline-none"
+                  className="bg-[#F5F7F9] p-3 text-sm border border-[#E5E5E5] rounded-md w-full outline-none"
                   required={true}
                   {...register("name", {
                     required: "This field is required",
@@ -100,7 +100,7 @@ function AddUserForm({ data, onAddUser }) {
                   id="email"
                   type="email"
                   placeholder="hello@gmail.com"
-                  className="bg-[#F5F7F9] p-3 text-sm border-[#E5E5E5] rounded-md w-full outline-none"
+                  className="bg-[#F5F7F9] p-3 text-sm border border-[#E5E5E5] rounded-md w-full outline-none"
                   {...register("email", {
                     required: "This field is required",
                   })}
@@ -137,7 +137,7 @@ function AddUserForm({ data, onAddUser }) {
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  className="bg-[#F5F7F9] p-3 text-sm border-[#E5E5E5] rounded-md w-full outline-none"
+                  className="bg-[#F5F7F9] p-3 text-sm border border-[#E5E5E5] rounded-md w-full outline-none"
                   required={true}
                   {...register("password", {
                     required: "This field is required",
@@ -164,7 +164,7 @@ function AddUserForm({ data, onAddUser }) {
                 <input
                   id="phone_no"
                   type="text"
-                  className="bg-[#F5F7F9] p-3 text-sm border-[#E5E5E5] rounded-md w-full outline-none"
+                  className="bg-[#F5F7F9] p-3 text-sm border border-[#E5E5E5] rounded-md w-full outline-none"
                   placeholder="Phone no"
                   {...register("phone_no", {
                     required: "This field is required",
@@ -214,8 +214,8 @@ function AddUserForm({ data, onAddUser }) {
               >
                 Profile Image
               </span>
-              <div className="w-full flex gap-4">
-                <label for="dropzone-file" className="flex flex-col items-center justify-center w-max-xl w-3/6 h-44 cursor-pointer rounded-md bg-[#F5F7F9] border-1 border-[#E5E5E5] text-[#313131] text-sm">
+              <div className="w-full flex flex-col lg:flex-row gap-4">
+                <label for="dropzone-file" className="flex flex-col items-center justify-center w-max-xl lg:w-3/6 h-44 cursor-pointer rounded-md bg-[#F5F7F9] border border-[#E5E5E5] text-[#313131] text-sm">
                   <div class="flex flex-col items-center justify-center pt-5 pb-6">
                     <br />
                     <svg

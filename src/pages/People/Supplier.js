@@ -10,24 +10,24 @@ import ConfirmDelete from "../../global/ConfirmDelete";
 
 
 const columns= [
-    { field: 'supplier_name', headerName: 'Supplier Name', width: 250 ,
+    { field: 'supplier_name', headerName: 'Supplier Name', flex:1 ,
       renderCell:(params) => (
        <span>{params.row.supplier_name}</span>
       )
     },
-    { field: 'phone_no', headerName: 'Contact Number', width:250,
+    { field: 'phone_no', headerName: 'Contact Number', flex:1,
       renderCell:(params) =>(
         <span>{params.row.phone_no}</span>
       )
     },
-    { field: 'country', headerName: 'Country',width:250 ,
+    { field: 'country', headerName: 'Country',flex:1 ,
         renderCell:(params)=>(
             <span>{params.row.country}</span>
         )
     },
     {
       field: 'city',
-      headerName: 'City', width:250,
+      headerName: 'City',flex:1,
       renderCell: (params) => (
         <span>{params.row.city}</span>
       ),
@@ -64,13 +64,13 @@ function Supplier(data){
 
     return(
     <div className="px-4 py-6 text-sm">
-        <div className="flex item-center justify-between">
+        <div className="flex item-center justify-between flex-wrap md:gap-0 gap-4">
 
             <div className="text-start">
                 <h2 className="text-lg text-primary font-semibold">Supplier</h2>
                 <span className="text-sm">Manage Suppliers List</span>
             </div>
-            <Link to="/people/supplier/add" className="bg-primary flex items-center text-sm text-white rounded-md px-4 py-2 shadow-md">
+            <Link to="/people/supplier/add" className="bg-primary flex items-center text-sm text-white rounded-md px-4 md:py-2 py-4 shadow-md">
                 + Add Supplier
             </Link>
         </div>

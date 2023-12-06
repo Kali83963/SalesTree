@@ -57,7 +57,7 @@ function AddSupplierForm() {
         </div>
 
         <div className="bg-white rounded-md mt-6 p-5 shadow-md">
-          <form className="w-full grid grid-cols-4 gap-4" onSubmit={handleSubmit(onSubmitLogin)}>
+          <form className="w-full grid md:grid-cols-2 lg:grid-cols-4 gap-4" onSubmit={handleSubmit(onSubmitLogin)}>
             <div className="flex flex-col items-start justify-start gap-1 mt-5">
               <label
                 htmlFor="name"
