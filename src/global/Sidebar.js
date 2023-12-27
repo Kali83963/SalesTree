@@ -47,7 +47,7 @@ function SideBar(){
                         }
                         
                         <ul className="ml-3 py-1 flex flex-col gap-3">
-                            <NavLink to="/" className={({isActive}) => (`flex gap-3 text-sm ${ isActive && ('text-primary font-semibold')}`)}>
+                            <NavLink to="/dashboard" className={({isActive}) => (`flex gap-3 text-sm ${ isActive && ('text-primary font-semibold')}`)}>
                                 <Squares2X2Icon className="h-7"/>
                                 <span>DashBoard</span>
                             </NavLink>

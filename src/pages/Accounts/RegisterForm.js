@@ -1,13 +1,44 @@
 import BrandLogo from "../../Assests/images/Group 60223.png";
 import { EnvelopeIcon,UserIcon,UserGroupIcon,MapPinIcon } from "@heroicons/react/24/outline";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FacebookButton, GoogleButton } from "./LoginForm";
 import FacebookLogin from "@greatsumini/react-facebook-login";
 import { useGoogleLogin } from "@react-oauth/google";
 import SelectInput from "../../global/SelectInput";
+import { toast } from "react-toastify";
+import { MenuItem, Select } from "@mui/material";
+import { SocialLogin, signUp } from "./AccountApis";
+import { loginUser } from "../../globalslice";
+import { useDispatch } from "react-redux";
+
+
+
+const validatePassword = (value) => {
+  let errorMessage = '';
+
+  if (value.length < 8) {
+    errorMessage = 'Password must be at least 8 characters long.';
+  } else if (!/[a-z]/.test(value)) {
+    errorMessage = 'Password must contain at least one lowercase letter.';
+  } else if (!/\d/.test(value)) {
+    errorMessage = 'Password must contain at least one digit.';
+  }
+
+  // Display error message using toastify
+  if(errorMessage)
+    return errorMessage;
+  
+
+  return;
+  
+};
+
+
+
+
 
 function Register() {
   const [showPassword1, setShowPassword1] = useState(false);
@@ -16,13 +47,57 @@ function Register() {
   const currenciesRef = useRef({});
 
   const { register, handleSubmit, reset, getValues, formState,control } = useForm();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { errors } = formState;
 
-  function onSubmitLogin(data) {
-    console.log(data);
+  function onSubmit(data) {
+    const {
+      name,
+      org_name,
+      email,
+      password1,
+      password2,
+      address,
+      currency,
+    } = data;
+
+    if(password1 !== password2){
+      toast.error("Password dose not match", {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      return;
+    }
+    const obj = { name,email,password:password1,address,currency,org_name:{name:org_name}}
+    signUp(obj).then(()=> navigate("/dashboard"))
+
+
+
   }
 
+
+  function onError(errors){
+
+
+    for(let error in errors){
+      console.log(error)
+      toast.error(errors[error].message, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+    }
+    return;
+  }
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => console.log(codeResponse),
@@ -55,10 +130,10 @@ function Register() {
 
   return (
     <div className="flex items-center justify-center md:w-5/12  md:flex-none flex-1">
-    <div className=" lg:w-4/6 md:w-3/6 w-5/6 flex flex-col gap-3 items-center justify-center py-10">
+    <div className=" lg:w-4/6 md:w-3/6 w-5/6 flex flex-col items-center justify-center">
       <img src={BrandLogo} alt="salsestree" className="w-52" />
       <h3 className="font-semibold text-lg text-text-color">Create an Account</h3>
-      <form className="w-full" onSubmit={handleSubmit(onSubmitLogin)}>
+      <form className="w-full" onSubmit={handleSubmit(onSubmit,onError)}>
         <div className="flex flex-col items-start gap-1 mt-5 w-full">
           <label
             htmlFor="name"
@@ -135,6 +210,7 @@ function Register() {
               required={true}
               {...register("password1", {
                 required: "This field is required",
+                validate:(value) => validatePassword(value)
               })}
             />
 
@@ -194,6 +270,7 @@ function Register() {
               type="text" 
               className="bg-[#F5F7F9] p-3 text-sm border rounded-lg border-[#E5E5E5] w-full outline-none"
               placeholder="Address"
+              required
               {...register("address", {
                 required: "This field is required",
               })}
@@ -212,11 +289,43 @@ function Register() {
             Currency
           </label>
           <div className="relative w-full">
-            
-            <SelectInput data={currenciesRef.current} control={control} name="currency" 
-            {...register("currency", {
-              required: "This field is required",
-            })}/>
+            <Select
+              displayEmpty
+              sx={{width:'100%',outline:'none',height:50,textAlign:'start'}}
+              className="bg-[#F5F7F9] text-sm border rounded-lg border-[#E5E5E5] outline-none "
+              renderValue={(selected) => {
+                return selected;
+              }}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: 200, // Adjust this value
+                    width: 100,
+                  },
+                },
+              }}
+              required
+              inputProps={{ 'aria-label': 'Without label' }}
+              {...register("currency", {
+                required: "This field is required",
+              })}
+              >
+                <MenuItem disabled value="">
+                <em>Placeholder</em>
+                </MenuItem>
+                {Object.keys(currenciesRef.current).map((name) => (
+                <MenuItem
+                  key={name}
+                  value={name}
+                  
+                >
+                  <div className="w-full flex">
+                    <span className="flex-1">{name}</span>
+                    <span className="flex-1">{currenciesRef.current[name]}</span>
+                  </div>
+                </MenuItem>
+            ))}
+            </Select>
           </div>
         </div>
         <div className="flex items-start gap-3 mt-6">
@@ -224,7 +333,8 @@ function Register() {
             <input
               id="terms_condtion"
               type="checkbox"
-              className="bg-[#F5F7F9] p-3 text-sm border rounded-lg border-[#E5E5E5] w-full outline-none"
+              className="bg-[#F5F7F9] p-3 text-sm border rounded-lg border-[#E5E5E5] w-full outline-none hover:border-[#E5E5E5]"
+              required
               {...register("terms and condition", {
                 required: "This field is required",
               })}
@@ -258,12 +368,18 @@ function Register() {
             <FacebookLogin
               appId="304040055824824"
               onSuccess={(response) => {
+                const { accessToken, graphDomain:provider } = response
+                SocialLogin(accessToken,provider)
+                navigate('/dashboard')
                 console.log("Login Success!", response);
               }}
               onFail={(error) => {
                 console.log("Login Failed!", error);
               }}
               onProfileSuccess={(response) => {
+                response.picture = response.picture.data.url;
+                localStorage.setItem('user',JSON.stringify(response))
+                dispatch(loginUser({user:response}))
                 console.log("Get Profile Success!", response);
               }}
               render={({ onClick, logout }) => (

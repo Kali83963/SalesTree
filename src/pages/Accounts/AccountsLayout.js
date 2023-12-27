@@ -3,7 +3,7 @@ import HeroImage from "../../Assests/images/Login@2x.png";
 
 function AccountsLayout() {
   return (
-    <div className="flex w-full h-full">
+    <div className="flex w-full h-full my-10">
             <Outlet />
         
         <div className="hidden md:flex md:flex-auto fixed top-0 right-0 h-screen md:w-7/12">

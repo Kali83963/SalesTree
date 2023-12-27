@@ -6,3 +6,7 @@
 .MuiDataGrid-columnHeaderTitle.css-t89xny-MuiDataGrid-columnHeaderTitle{
   font-weight: 600 !important;
 }
+
+.MuiDataGrid-overlayWrapper{
+  min-height: 164px !important;
+}

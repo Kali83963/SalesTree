@@ -10,9 +10,10 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useState } from 'react';
 import { ChevronDoubleDownIcon, ChevronDoubleLeftIcon, ChevronDoubleRightIcon, ChevronDownIcon, ChevronLeftIcon, ChevronUpIcon, Cog6ToothIcon, PowerIcon, UserIcon } from '@heroicons/react/24/outline';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleSidebar } from '../globalslice';
+import { logout } from '../pages/Accounts/AccountApis';
 
 const userDropDownList = [
     {
@@ -32,7 +33,7 @@ const userDropDownList = [
     {
         'id':Math.random().toFixed(2),
         'name':'Log Out',
-        'icon':<button>
+        'icon':<button onClick={logout}>
             <PowerIcon className='h-6 text-primary'/>
         </button> 
     },
@@ -66,6 +67,7 @@ function TopBar(){
     const sidebarShow = useSelector(state => state.global.sidebarShow);
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     function handleUserDropDown(){
         setUserDropDown(DropDown => !DropDown);

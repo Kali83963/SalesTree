@@ -4,6 +4,7 @@ import ConfirmDelete from "../../global/ConfirmDelete";
 import { Link } from "react-router-dom";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import { useEffect, useState } from "react";
 
 const columns= [
     { field: 'category_name', headerName: 'Category Name', flex:1 ,
@@ -45,6 +46,13 @@ const columns= [
 
 
 function Category(){ 
+
+    const {pageNumber,setPageNumber} = useState(0)
+
+    
+    useEffect(function(){
+
+    },[pageNumber])
 
     return(
     <div className="px-4 py-6 text-sm">

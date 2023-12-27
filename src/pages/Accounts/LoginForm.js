@@ -5,13 +5,19 @@ import FacebookLogin from "@greatsumini/react-facebook-login";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { useGoogleLogin } from "@react-oauth/google";
+import {login as UserLogin, SocialLogin} from '../Accounts/AccountApis'
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../globalslice";
 
 function LoginForm() {
   const [show, setShowPassword] = useState(false);
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const {register,handleSubmit,reset,getValues,formState}=useForm();
 
@@ -19,19 +25,33 @@ function LoginForm() {
 
 
 
-  const login = useGoogleLogin({
+  const Googlelogin = useGoogleLogin({
     onSuccess: (codeResponse) => console.log(codeResponse),
     flow: "auth-code", // code and then send request to get accesstoken and jwt token
     // flow:'implicit' for accesstoken but no jwt and refresh token
   });
 
 
-  function onSubmitLogin(data){
 
-    console.log(data)
+  function onSubmitLogin(data){
+    const {email,password} = data;
+    UserLogin(email,password).then(()=>
+      navigate('/dashboard')
+      
+    )
+  }
+  function onErrorLogin(data){
+    const {email,password} = data;
+    if(email && password){
+      toast.error("Please enter email and password!");
+    }else if (password){
+      toast.error("Please enter password");
+    }else{
+      toast.error("Please enter email");
+    }
+    return ;
 
   }
-
   return (
     <div className="flex items-center justify-center md:w-5/12  md:flex-none flex-1 md:mr-auto">
         <div className="flex flex-col gap-3 items-center justify-center md:w-4/6 w-5/6" style={{minHeight:'100vh'}}>
@@ -41,7 +61,7 @@ function LoginForm() {
             Please sign in to your account
           </span>
 
-          <form className="w-full" onSubmit={handleSubmit(onSubmitLogin)}>
+          <form className="w-full" onSubmit={handleSubmit(onSubmitLogin,onErrorLogin)} >
             <div className="flex flex-col items-start gap-1 mt-9 w-full">
               <label
                 htmlFor="email"
@@ -107,17 +127,23 @@ function LoginForm() {
           </span>
 
           <div className="flex items-center gap-10 mt-6">
-            <GoogleButton onLogin={login} />
+            <GoogleButton onLogin={Googlelogin} />
             <FacebookLogin
               appId="304040055824824"
               onSuccess={(response) => {
+                const { accessToken, graphDomain:provider } = response
+                SocialLogin(accessToken,provider)
+                navigate('/dashboard')
                 console.log("Login Success!", response);
               }}
               onFail={(error) => {
                 console.log("Login Failed!", error);
               }}
               onProfileSuccess={(response) => {
-                console.log("Get Profile Success!", response);
+                response.picture = response.picture.data.url;
+                localStorage.setItem('user',JSON.stringify(response))
+                dispatch(loginUser({user:response}))
+               
               }}
               render={({ onClick, logout }) => (
                 <FacebookButton onClick={onClick} />
