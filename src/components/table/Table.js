@@ -129,7 +129,7 @@ function CustomToolBar() {
   );
 }
 
-function Table({ data, columns,isLoading }) {
+function Table({ data, columns,isLoading,showToolbar=true,showCheckboxSelection = true,showPagination=false }) {
 
 
   const [paginationModel, setPaginationModel] = useState({
@@ -145,44 +145,53 @@ function Table({ data, columns,isLoading }) {
       setPaginationModel(newPaginationModel);
     }
   };
+  const gridConfig = {
+    localeText: {
+      toolbarExportCSV: '',
+      toolbarExportPrint: '',
+    },
+    sx: { border: 'none' },
+    rows: data,
+    getRowId: (row) => row.id,
+    columns: columns,
+    initialState: {
+      pagination: {
+        paginationModel: { page: 0, pageSize: 5 },
+      },
+    },
+    slots: {
+      noResultsOverlay: CustomNoRowsOverlay,
+      toolbar: showToolbar && CustomToolBar,
+      loadingOverlay: LinearProgress,
+    },
+    slotProps: {
+      toolbar: {
+        showQuickFilter: true,
+      },
+    },
+    pageSizeOptions: [5, 10],
+    getRowHeight: (params) => 70,
+    disableRowSelectionOnClick: true,
+    disableColumnMenu: true,
+    disableColumnFilter: true,
+    disableColumnSelector: true,
+    disableDensitySelector: true,
+    paginationMode: 'server',
+    rowCount: PAGE_SIZE,
+    onPaginationModelChange: handlePaginationModelChange,
+    paginationModel: paginationModel,
+    loading: isLoading,
+  };
 
+  if (showCheckboxSelection) {
+    gridConfig.checkboxSelection = true;
+  }
+
+  if(showPagination){
+    gridConfig.pagination = false
+  }
   return (
-    <DataGrid
-      localeText={{
-        toolbarExportCSV: "",
-        toolbarExportPrint: "",
-      }}
-      sx={{ border: "none" }}
-      rows={data}
-      getRowId={(row) => row.id}
-      columns={columns}
-      initialState={{
-        pagination: {
-          paginationModel: { page: 0, pageSize: 5 },
-        },
-      }}
-      slots={{ noResultsOverlay:CustomNoRowsOverlay,toolbar: CustomToolBar,loadingOverlay:LinearProgress }}
-      slotProps={{
-        toolbar: {
-          showQuickFilter: true,
-        },
-        
-      }}
-      pageSizeOptions={[5, 10]}
-      getRowHeight={(params) => 70}
-      checkboxSelection
-      disableRowSelectionOnClick
-      disableColumnMenu
-      disableColumnFilter
-      disableColumnSelector
-      disableDensitySelector
-      paginationMode="server"
-      rowCount={PAGE_SIZE}
-      onPaginationModelChange={handlePaginationModelChange}
-      paginationModel={paginationModel}
-      
-      loading={isLoading}
-    />
+    <DataGrid {...gridConfig} />
   );
 }
 

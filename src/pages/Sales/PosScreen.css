@@ -1,0 +1,3 @@
+.payment-label input:checked  {
+  border: 1px solid blue; /* Change this to the desired highlight color */
+}
