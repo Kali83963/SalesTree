@@ -1,0 +1,26 @@
+.css-qvtrhg-MuiDataGrid-virtualScroller::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background-color: #707070;
+  }
+  
+  .css-qvtrhg-MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb {
+    background-color: #5A6DFC;
+    width: 10px;
+    border-radius: 16px;
+  }
+  
+  .css-qvtrhg-MuiDataGrid-virtualScroller::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+  
+  /* Optionally, you can hide the scrollbar track */
+  .css-qvtrhg-MuiDataGrid-virtualScroller::-webkit-scrollbar-track {
+    display: none;
+  }
+  
+  /* Optionally, you can hide the scrollbar corner */
+  .css-qvtrhg-MuiDataGrid-virtualScroller::-webkit-scrollbar-corner {
+    display: none;
+  }
+  

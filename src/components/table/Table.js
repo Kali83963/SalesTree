@@ -43,6 +43,7 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
 }));
 
 export function CustomNoRowsOverlay({width=1200,text}) {
+  console.log('hello')
   return (
     <>
     <StyledGridOverlay>
@@ -156,7 +157,7 @@ function Table({ data, columns,isLoading,showToolbar=true,showCheckboxSelection 
     columns: columns,
     initialState: {
       pagination: {
-        paginationModel: { page: 0, pageSize: 5 },
+        paginationModel: { page: 1, pageSize: 5 },
       },
     },
     slots: {
