@@ -1,0 +1,28 @@
+// To Create Company Table
+CREATE TABLE company (
+    ID serial PRIMARY KEY,
+    name varchar(30) UNIQUE NOT NULL ,
+    created_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp,
+    is_delete boolean default false
+);
+
+// To Create User Table
+
+CREATE TABLE users (
+    ID serial PRIMARY KEY,
+    name varchar(255) NOT NULL,
+    email varchar(255) UNIQUE NOT NULL,
+    company_id integer NOT NULL,
+    password varchar(255) NOT NULL,
+    role varchar(20) CHECK (role IN ('administrator', 'sales associate')) NOT NULL,
+    currency varchar(10),
+    timezone varchar(50),
+    created_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp,
+    is_delete boolean default false,
+    FOREIGN KEY (company_id) REFERENCES company (ID) ON DELETE CASCADE
+);
+
+// Grant Access to Table
+    GRANT ALL PRIVILEGES ON TABLE users TO admin;
