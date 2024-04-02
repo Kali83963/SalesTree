@@ -8,10 +8,10 @@ import { useGoogleLogin } from "@react-oauth/google";
 // import {login as UserLogin, SocialLogin} from '../Accounts/AccountApis'
 
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import { loginUser } from "../../redux/globalslice";
 import { login } from "../../redux/auth/action";
 
@@ -19,6 +19,7 @@ function LoginForm() {
   const [show, setShowPassword] = useState(false);
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { isLoading, isSuccess } = useSelector(state=> state.auth);
 
   const {register,handleSubmit,reset,getValues,formState}=useForm();
 
@@ -34,11 +35,20 @@ function LoginForm() {
 
 
 
- function onSubmitLogin(data){
-
-    dispatch(login(data));
-    navigate('/dashboard');
+  async function onSubmitLogin(data) {
+    try {
+      await dispatch(login(data));
+      console.log(isSuccess); // Assuming isSuccess is defined elsewhere
+      navigate('/dashboard');
+    } catch (error) {
+      console.log('An error occurred during login:', error);
+      // Handle error if needed
+    }
   }
+
+  
+
+
   function onErrorLogin(data){
     const {email,password} = data;
     if(email && password){
@@ -51,9 +61,14 @@ function LoginForm() {
     return ;
 
   }
+
+  
+
+ 
+
   return (
-    <div className="flex items-center justify-center md:w-5/12  md:flex-none flex-1 md:mr-auto">
-        <div className="flex flex-col gap-3 items-center justify-center md:w-4/6 w-5/6" style={{minHeight:'100vh'}}>
+    <div className="flex-1 flex flex-col items-center justify-center md:p-0 p-5" style={{minWidth:'320px'}}>
+        <div className="flex flex-col items-center justify-center flex-1 lg:min-w-[400px] min-w-[320px]" >
           <img src={BrandLogo} alt="salsestree" className="w-52" />
           <h3 className="font-semibold text-lg text-text-color">Sign In</h3>
           <span className="text-text-color text-sm">
@@ -72,8 +87,7 @@ function LoginForm() {
                 <input
                   id="email"
                   type="email"
-                  placeholder="hello@gmail.com"
-                  className="bg-[#F5F7F9] p-3 text-sm border rounded-lg border-[#E5E5E5] w-full outline-none"
+                  className="bg-[#F5F7F9] p-3 text-sm border rounded-lg border-[#E5E5E5] w-full outline-none hover:border-primary focus:border-primary"
                   {...register("email",{
                     required:"This field is required"
                   })}
@@ -92,7 +106,7 @@ function LoginForm() {
                 <input
                   id="password"
                   type={show ? "text" : "password"}
-                  className="bg-[#F5F7F9] p-3 text-sm border rounded-lg border-[#E5E5E5] w-full outline-none"
+                  className="bg-[#F5F7F9] p-3 text-sm border rounded-lg border-[#E5E5E5] w-full outline-none hover:border-primary focus:border-primary"
                   {...register("password",{
                     required:"This field is required"
                   })}

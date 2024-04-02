@@ -63,10 +63,10 @@ exports.welcomeEmail = ({
   };
 
 
-exports.resetPasswordLink = ({
+exports.resetPasswordLink = (
 token
-}) => {
+) => {
   return `
-  <p>You requested a password reset. Click <a href="${process.env.BACKEND_URL}/reset-password/${token}">here</a> to reset your password.</p>
+  <p>You requested a password reset. Click <a href="${process.env.CLIENT_URL}/account/reset/password/${token}">here</a> ${process.env.CLIENT_URL}/account/reset/password/${token} to reset your password.</p>
   `
 }

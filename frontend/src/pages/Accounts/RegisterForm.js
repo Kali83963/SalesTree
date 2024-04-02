@@ -12,50 +12,29 @@ import { toast } from "react-toastify";
 import { MenuItem, Select } from "@mui/material";
 // import { SocialLogin, signUp } from "./AccountApis";
 import { loginUser } from "../../redux/globalslice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CURRENCIES } from "../../utils/currencies";
 import { register, signUp } from "../../redux/auth/action";
-
-
-
-
-const validatePassword = (value) => {
-  let errorMessage = '';
-
-  if (value.length < 8) {
-    errorMessage = 'Password must be at least 8 characters long.';
-  } else if (!/[a-z]/.test(value)) {
-    errorMessage = 'Password must contain at least one lowercase letter.';
-  } else if (!/\d/.test(value)) {
-    errorMessage = 'Password must contain at least one digit.';
-  }
-
-  // Display error message using toastify
-  if(errorMessage)
-    return errorMessage;
-  
-
-  return;
-  
-};
-
-
+import { validatePassword } from "../../utils/passwordValidator";
 
 
 
 function Register() {
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
-  const [currencyLoading,setCurrencyloading] = useState(false);
-  const currenciesRef = useRef({});
+  const [currency,setCurrency] = useState('');
+  const currenciesRef = useRef(CURRENCIES);
+  const { isLoading, isSuccess } = useSelector(state=> state.auth.current);
 
   const { register, handleSubmit, reset, getValues, formState,control } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
 
   const { errors } = formState;
 
   function onSubmit(data) {
+
     const {
       name,
       org_name,
@@ -79,19 +58,12 @@ function Register() {
     }
     const obj = { name,email,password:password1,address,currency,company:org_name,timezone:'UTC'}
     // signUp(obj).then(()=> navigate("/dashboard"))
-
-    dispatch(signUp(obj))
-    navigate("/dashboard")
-
-
+     dispatch(signUp(obj))
   }
 
 
   function onError(errors){
-
-
     for(let error in errors){
-      console.log(error)
       toast.error(errors[error].message, {
             position: 'top-right',
             autoClose: 5000,
@@ -104,6 +76,10 @@ function Register() {
     return;
   }
 
+  useEffect(() => {
+    if (isSuccess) navigate('/dashboard');
+  }, [isSuccess]); 
+
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => console.log(codeResponse),
     flow: "auth-code", // code and then send request to get accesstoken and jwt token
@@ -111,26 +87,10 @@ function Register() {
   });
 
 
-  useEffect(function(){
-    async function fetchData() {
-      
-        try {
-          setCurrencyloading(true)
-          currenciesRef.current = CURRENCIES;
-          setCurrencyloading(false);
-        } catch (error) {
-          setCurrencyloading(false);
-        }
-      }
-
-      if(Object.keys(currenciesRef.current).length === 0)
-          fetchData();
-  },[])
-
 
   return (
-    <div className="flex items-center justify-center md:w-5/12  md:flex-none flex-1">
-    <div className=" lg:w-4/6 md:w-3/6 w-5/6 flex flex-col items-center justify-center">
+    <div className="flex-1 flex flex-col items-center justify-center md:p-0 p-5" style={{minWidth:'320px'}}>
+    <div className="flex flex-col items-center justify-center lg:min-w-[400px]">
       <img src={BrandLogo} alt="salsestree" className="w-52" />
       <h3 className="font-semibold text-lg text-text-color">Create an Account</h3>
       <form className="w-full" onSubmit={handleSubmit(onSubmit,onError)}>
@@ -291,9 +251,10 @@ function Register() {
           <div className="relative w-full">
             <Select
               displayEmpty
-              sx={{width:'100%',outline:'none',height:50,textAlign:'start'}}
-              className="bg-[#F5F7F9] text-sm border rounded-lg border-[#E5E5E5] outline-none "
+              sx={{width:'100%',outline:'none',height:50,textAlign:'start',fontSize:'small'}}
+              className="bg-[#F5F7F9] text-sm border rounded-lg border-[#E5E5E5] outline-none hover:outline-none hover:border-[#E5E5E5]"
               renderValue={(selected) => {
+                setCurrency(selected);
                 return selected;
               }}
               MenuProps={{
@@ -311,7 +272,7 @@ function Register() {
               })}
               >
                 <MenuItem disabled value="">
-                <em>Placeholder</em>
+                <span>{currency}</span>
                 </MenuItem>
                 {Object.keys(currenciesRef.current).map((name) => (
                 <MenuItem
@@ -320,8 +281,8 @@ function Register() {
                   
                 >
                   <div className="w-full flex">
-                    <span className="flex-1">{name}</span>
-                    <span className="flex-1">{currenciesRef.current[name]}</span>
+                    <span className="flex-1 text-sm">{name}</span>
+                    <span className="flex-1 text-sm">{currenciesRef.current[name]}</span>
                   </div>
                 </MenuItem>
             ))}
@@ -364,7 +325,7 @@ function Register() {
       </span>
 
       <div className="flex items-center gap-10 mt-6">
-            <GoogleButton onLogin={login} />
+            {/* <GoogleButton onLogin={login} />
             <FacebookLogin
               appId="304040055824824"
               onSuccess={(response) => {
@@ -385,7 +346,7 @@ function Register() {
               render={({ onClick, logout }) => (
                 <FacebookButton onClick={onClick} />
               )}
-            />
+            /> */}
         </div>
     </div>
     </div>

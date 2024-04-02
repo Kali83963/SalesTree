@@ -30,19 +30,19 @@ import errorHandler from '../../requests/errorHandler';
 
 export const login = async (email, password) => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/auth/login`, {
+      const response = await axios.post(`${BASE_URL}auth/login`, {
         email,
         password
       });
   
       if (response.error) {
-        return errorHandler(response.error);
+        errorHandler(response.error);
       }
   
       return response.data;
     } catch (error) {
-      
-      return errorHandler(error);
+      errorHandler(error);
+      throw new Error(error.message)
     }
   };
 

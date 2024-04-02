@@ -1,7 +1,9 @@
 import { Route, Routes } from "react-router-dom";
-import Sales from "./Sales";
-import SalesReturn from "./SalesReturn";
-import PosScreen from "./PosScreen";
+import { lazy } from 'react';
+
+const Sales = lazy(() => import("./Sales"));
+const SalesReturn = lazy(() => import("./SalesReturn"));
+const PosScreen = lazy(() => import("./PosScreen"));
 
 
 
@@ -12,8 +14,6 @@ export  function SalesRouter(){
                 <Route path="/" element={<Sales />}/>
                 <Route path="/return" element={<SalesReturn />}/>
                 <Route path="/pos" element={<PosScreen />}/>
-                <Route path="/*" element={<h1>Not found</h1>}/>
-                
             </Routes>
 
         </>

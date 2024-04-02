@@ -1,11 +1,15 @@
 import { Route, Routes } from "react-router-dom";
-import ManageUsers from "./ManageUsers";
-import Customer from "./Customer";
-import Supplier from "./Supplier";
+
 import DummyData from './users.json';
 import { useState } from "react";
-import AddUserForm from "./AddUserForm";
-import AddSupplierForm from "./AddSupplierForm";
+import { lazy } from 'react';
+
+const ManageUsers = lazy(() => import("./ManageUsers"));
+const Customer = lazy(() => import("./Customer"));
+const Supplier = lazy(() => import("./Supplier"));
+const AddUserForm = lazy(() => import("./AddUserForm"));
+const AddSupplierForm = lazy(() => import("./AddSupplierForm"));
+
 
 
 

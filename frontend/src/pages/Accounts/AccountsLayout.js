@@ -3,11 +3,16 @@ import HeroImage from "../../Assests/images/Login@2x.png";
 
 function AccountsLayout() {
   return (
-    <div className="flex w-full h-full my-10">
+    <div className="grid md:grid-cols-6 w-full h-screen overflow-y-auto gap-4">
+        <div className=" lg:col-span-3 col-span-6 flex items-center">
+
             <Outlet />
+        </div>
         
-        <div className="hidden md:flex md:flex-auto fixed top-0 right-0 h-screen md:w-7/12">
-            <img src={HeroImage} alt="money" className=" w-full object-cover" />
+        <div className="hidden lg:block  lg:col-span-3  min-h-screen max-h-full">
+            <div className="w-full h-full ">
+              <img src={HeroImage} alt="money" className=" w-full h-full" />
+              </div>
         </div>
     </div>
   )

@@ -1,4 +1,4 @@
-const service = require('../service/authService');
+const service = require('../../service/authService/authService');
 
 
 const registerUserContoller = async (req, res, db) => {
@@ -37,14 +37,7 @@ const forgotPasswordController = (async (req,res)=>{
     }
 });
 
-const resetPasswordConfirmationController = (async (req,res)=>{
-    try {
-        const response = await service.resetPasswordConfirmation(req);
-        res.redirect(`${process.env.CLIENT_URL}/reset-password-page/${response.token}`);
-    } catch (error) {
-        res.redirect(`${process.env.CLIENT_URL}/reset-password-page-failed`);
-    }
-});
+
 
 const resetPasswordController = (async (req,res)=>{
     try {
@@ -56,15 +49,7 @@ const resetPasswordController = (async (req,res)=>{
     }
 });
 
-// const logoutController = (async (req,res)=>{
-//     try {
-//         const body = req.body;
-//         const user = await service.loginUser(body);
-//         res.status(201).json({ user });
-//     } catch (error) {
-//         res.status(400).json({ message: error.message });
-//     }
-// });
+
 
 
 
@@ -74,6 +59,5 @@ module.exports = {
     loginUserController,
     currentUser,
     forgotPasswordController,
-    resetPasswordConfirmationController,
     resetPasswordController,
 }

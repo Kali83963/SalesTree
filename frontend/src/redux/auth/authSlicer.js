@@ -22,10 +22,12 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = true;
     },
-    registerSuccess: () => ({
-      ...initialState,
-      isSuccess: true,
-    }),
+    registerSuccess: (state, action) => {
+      state.current = action.payload;
+      state.isLoggedIn = true;
+      state.isLoading = false;
+      state.isSuccess = true;
+    },
     logoutSuccess: () => initialState,
     logoutFailed: (state, action) => {
       state.current = action.payload;

@@ -1,13 +1,16 @@
 import { Route, Routes } from "react-router-dom";
-import Products from "./Products";
-import Category from "./Category";
-import SubCategory from "./SubCategory";
-import Manufacture from "./Manufacture";
-import AddCategoryForm from "./AddCategoryForm";
-import AddSubCategoryForm from "./AddSubCategoryForm";
-import AddProductsForm from "./AddProductsForm";
-import ProductDetail from "./ProductDetail";
-import AddManufactureForm from "./AddManufactureForm";
+import { lazy } from 'react';
+
+const Products = lazy(() => import("./Products"));
+const Category = lazy(() => import("./Category"));
+const SubCategory = lazy(() => import("./SubCategory"));
+const Manufacture = lazy(() => import("./Manufacture"));
+const AddCategoryForm = lazy(() => import("./AddCategoryForm"));
+const AddSubCategoryForm = lazy(() => import("./AddSubCategoryForm"));
+const AddProductsForm = lazy(() => import("./AddProductsForm"));
+const ProductDetail = lazy(() => import("./ProductDetail"));
+const AddManufactureForm = lazy(() => import("./AddManufactureForm"));
+
 
 
 
@@ -24,9 +27,6 @@ export function ProductRouter(){
                 <Route path="/product/detail/:id" element={<ProductDetail />}/>
                 <Route path="/manufacture" element={<Manufacture />}/>
                 <Route path="/manufacture/add" element={<AddManufactureForm />}/>
-                <Route path="/*" element={<h1>Not found</h1>}/>
-                
-                
             </Routes>
 
         </>

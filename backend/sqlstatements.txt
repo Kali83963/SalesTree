@@ -12,10 +12,11 @@ CREATE TABLE company (
 CREATE TABLE users (
     ID serial PRIMARY KEY,
     name varchar(255) NOT NULL,
+    profile_image varchar(255),
     email varchar(255) UNIQUE NOT NULL,
     company_id integer NOT NULL,
     password varchar(255) NOT NULL,
-    role varchar(20) CHECK (role IN ('administrator', 'sales associate')) NOT NULL,
+    address TEXT, -- Changed type to TEXT
     currency varchar(10),
     timezone varchar(50),
     created_at timestamp default current_timestamp,
@@ -26,3 +27,16 @@ CREATE TABLE users (
 
 // Grant Access to Table
     GRANT ALL PRIVILEGES ON TABLE users TO admin;
+
+CREATE TABLE employees (
+    ID serial PRIMARY KEY,
+    user_id INT,
+    created_by INT,
+    role varchar(20) CHECK (role IN ('admin', 'sales associate')) NOT NULL default 'sales associate',
+    status varchar(20) CHECK (status IN ('active','inactive')) NOT NULL default 'active',
+    created_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp,
+    is_delete boolean default false,
+    FOREIGN KEY (user_id) REFERENCES users (ID) ON DELETE CASCADE,
+    FOREIGN KEY (created_by) REFERENCES users (ID) ON DELETE CASCADE
+);

@@ -2,23 +2,26 @@ import BrandLogo from "../../Assests/images/Group 60223.png";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import request from "../../requests/request";
 
 function ForgotPasswordForm() {
 
 
   const {register,handleSubmit,reset,getValues,formState}=useForm();
-  const navigate = useNavigate();
+  
   const {errors} = formState;
 
 
-  function onSubmitLogin(data){
-    console.log(data)
-    navigate("/account/confirmation/code")
+  async function onSubmitLogin(data){
+    const {email} = data;
+    console.log(email)
+    await request.post({entity:'auth/forgot-password',jsonData:{email:email},notifyOnFailed:true,notifyOnSuccess:true});
+    reset();
   }
 
   return (
-    <div className="flex items-center justify-center md:w-5/12  md:flex-none flex-1 md:mr-auto">
-        <div className="flex flex-col gap-3 items-center justify-center md:w-4/6 w-5/6" style={{minHeight:'100vh'}}>
+    <div className="flex-1 flex flex-col items-center justify-center md:p-0 p-5" style={{minWidth:'320px'}}>
+        <div className="flex flex-col items-center justify-center flex-1 lg:min-w-[400px] min-w-[320px]">
           <img src={BrandLogo} alt="salsestree" className="w-52" />
           <h3 className="font-semibold text-lg text-text-color">Forgot Password?</h3>
           <p className="text-text-color text-sm">

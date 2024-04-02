@@ -24,8 +24,8 @@ function PasswordResetConformationForm() {
   }
 
   return (
-    <div className="flex items-center justify-center md:w-5/12  md:flex-none flex-1 md:mr-auto">
-        <div className="flex flex-col gap-3 items-center justify-center md:w-4/6 w-5/6" style={{minHeight:'100vh'}}>
+    <div className="flex-1 flex flex-col items-center justify-center md:p-0 p-5" style={{minWidth:'320px'}}>
+        <div className="flex flex-col items-center justify-center flex-1 lg:min-w-[400px] min-w-[320px]">
           <img src={BrandLogo} alt="salsestree" className="w-52" />
           <h3 className="font-semibold text-lg text-text-color">We sent a code to your email</h3>
           <p className="text-text-color text-sm">
