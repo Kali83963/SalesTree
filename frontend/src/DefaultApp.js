@@ -7,7 +7,7 @@ import AppRouter from './routes/AppRouter';
 function DefaultApp() {
 
   const auth = useSelector(state=> state.auth.current);
-  console.log(auth);
+  
   if(!auth.user){
     return <AuthRouter />
   }
