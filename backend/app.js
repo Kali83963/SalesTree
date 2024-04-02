@@ -6,7 +6,8 @@ const dotenv = require("dotenv").config();
 
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
-const userRoutes = require('./routes/authRoutes');
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes/userRoutes');
 // create our Express app
 const app = express();
 
@@ -25,18 +26,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 
 
-app.get('/', async (req, res) => {
-    try {
-        console.log(db)
-      const result = await db.query('SELECT * FROM users');
-      return res.json(result.rows);
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
-    }
-});
 
-app.use('/api/auth',userRoutes);
+
+app.use('/api/auth',authRoutes);
+app.use('/api/user',userRoutes);
 // app.use('/api', adminAuth.isValidAuthToken, coreApiRouter);
 // app.use('/api', adminAuth.isValidAuthToken, erpApiRouter);
 // app.use('/download', coreDownloadRouter);

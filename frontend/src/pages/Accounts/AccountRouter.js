@@ -1,10 +1,12 @@
 import { Route, Routes } from "react-router-dom";
-import Login from "./LoginForm";
-import Register from "./RegisterForm";
-import AccountsLayout from "./AccountsLayout";
-import ForgotPasswordForm from "./ForgotPasswordForm";
-import PasswordResetConformationForm from "./PasswordResetConformationForm";
-import ResetPasswordForm from "./ResetPasswordForm";
+import { lazy } from 'react';
+import NotFound from "../NotFound";
+const Login = lazy(() => import("./LoginForm"));
+const Register = lazy(() => import("./RegisterForm"));
+const AccountsLayout = lazy(() => import("./AccountsLayout"));
+const ForgotPasswordForm = lazy(() => import("./ForgotPasswordForm"));
+const PasswordResetConformationForm = lazy(() => import("./PasswordResetConformationForm"));
+const ResetPasswordForm = lazy(() => import("./ResetPasswordForm"));
 
 
 
@@ -17,9 +19,9 @@ export  function AccountRouter(){
                     <Route path="/register" element={<Register />}/>
                     <Route path="/forgot/password" element={<ForgotPasswordForm />}/>
                     <Route path="/confirmation/code" element={<PasswordResetConformationForm />}/>
-                    <Route path="/reset/password" element={<ResetPasswordForm />}/>
+                    <Route path="/reset/password/:token" element={<ResetPasswordForm />}/>
                 </Route>
-                <Route path="/*" element={<h1>Not found</h1>}/>
+                <Route path="/*" element={<NotFound/>}/>
             </Routes>
 
         </>

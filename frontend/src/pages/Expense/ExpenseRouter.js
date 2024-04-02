@@ -1,6 +1,9 @@
 import { Route, Routes } from "react-router-dom";
-import Expense from "./Expense";
-import ExpenseCategory from "./ExpenseCategory";
+import { lazy } from 'react';
+
+const Expense = lazy(() => import("./Expense"));
+const ExpenseCategory = lazy(() => import("./ExpenseCategory"));
+
 
 
 
@@ -9,8 +12,7 @@ export  function ExpenseRouter(){
         <>
             <Routes>
                 <Route path="/" element={<Expense />}/>
-                <Route path="/category" element={<ExpenseCategory />}/>
-                <Route path="/*" element={<h1>Not found</h1>}/>                
+                <Route path="/category" element={<ExpenseCategory />}/>          
             </Routes>
 
         </>

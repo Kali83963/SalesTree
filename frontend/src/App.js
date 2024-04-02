@@ -14,47 +14,20 @@ import MainLayout from './MainLayout';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
-import RequireAuth from './RequireAuth';
-import NoAuth from './NoAuth';
+import { Suspense, useState } from 'react';
+import RequireAuth from './routes/AppRouter';
+import NoAuth from './routes/AuthRouter';
+import PageLoader from './components/PageLoader/PageLoader';
+import DefaultApp from './DefaultApp';
 
 
 function App() {
 
-  // const isAuthenticated = useSelector(state => state.global.token )
-  const islogin = localStorage.getItem('token');
-
-  console.log(!islogin)
-
 
   return (
-
-    <div className="App">
-
-      
-          <Routes>
-              <Route element={<NoAuth /> }>
-                <Route index path='/account/*' element={<AccountRouter />} />
-              </Route>
-          
-      
-       
-            <Route element={<RequireAuth />} >
-              <Route element={<MainLayout />}>
-                <Route index path='/*' element={ <MainRouter />} />
-                <Route path='/products/*' element={ <ProductRouter />} />
-                <Route path='/purchase/*' element={ <PurchaseRouter />} />
-                <Route path='/people/*' element={ <PeopleRouter />} />
-                <Route path='/expense/*' element={ <ExpenseRouter />} />
-                <Route path='/sales/*' element={ <SalesRouter />} />
-                <Route path='/settings/*' element={ <SettingsRouter />} />
-              </Route>
-            </Route>
-            <Route path="/*" element={<h1>Not found</h1>}/>
-          </Routes>
-          
-
-    </div>
+    <Suspense fallback={<PageLoader /> }>
+      <DefaultApp />
+    </Suspense>
   );
 }
 

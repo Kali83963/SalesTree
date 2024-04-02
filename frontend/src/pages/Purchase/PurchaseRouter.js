@@ -1,9 +1,10 @@
 import { Route, Routes } from "react-router-dom";
-import Purchase from "./Purchase";
-import PurchaseReturn from "./PurchaseReturn";
-import AddPurchaseForm from "./AddPurchaseForm";
-import AddPurchaseReturnForm from "./AddPurchaseReturnForm";
+import { lazy } from 'react';
 
+const Purchase = lazy(() => import("./Purchase"));
+const PurchaseReturn = lazy(() => import("./PurchaseReturn"));
+const AddPurchaseForm = lazy(() => import("./AddPurchaseForm"));
+const AddPurchaseReturnForm = lazy(() => import("./AddPurchaseReturnForm"));
 
 
 export  function PurchaseRouter(){
@@ -14,7 +15,6 @@ export  function PurchaseRouter(){
                 <Route path="/add" element={<AddPurchaseForm />}/>
                 <Route path="/return" element={<PurchaseReturn />}/>
                 <Route path="/return/add" element={<AddPurchaseReturnForm />}/>
-                <Route path="/*" element={<h1>Not found</h1>}/>
             </Routes>
 
         </>
