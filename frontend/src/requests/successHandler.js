@@ -2,6 +2,7 @@ import {toast } from 'react-toastify';
 
 
 const successHandler = (response, options = { notifyOnSuccess: false, notifyOnFailed: true }) => {
+  console.log(response)
     const { data } = response;
     if (data && data.success === true) {
       

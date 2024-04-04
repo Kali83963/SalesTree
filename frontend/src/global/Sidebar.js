@@ -1,10 +1,9 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import Logo from '../Assests/images/Group 60223.png';
-import { CalculatorIcon, ChartBarIcon, ChartBarSquareIcon, CubeIcon, CurrencyDollarIcon, DocumentTextIcon, MapPinIcon, PowerIcon, ShoppingBagIcon, ShoppingCartIcon, Squares2X2Icon,TagIcon, UserGroupIcon, UserIcon, UsersIcon} from "@heroicons/react/24/outline";
+import { CalculatorIcon, ChartBarIcon, ChartBarSquareIcon, CubeIcon, CurrencyDollarIcon, DocumentTextIcon, MapPinIcon, PowerIcon, ShoppingBagIcon, Squares2X2Icon,TagIcon, UserGroupIcon, UserIcon, UsersIcon} from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import { Transition } from "@headlessui/react";
-import { Fragment } from "react";
+
 import { useEffect } from "react";
 import { useRef } from "react";
 import { toggleSidebar } from "../redux/globalslice";

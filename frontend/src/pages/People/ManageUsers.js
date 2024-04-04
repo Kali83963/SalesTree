@@ -11,16 +11,16 @@ import ConfirmDelete from '../../global/ConfirmDelete';
 
 
 const columns= [
-    { field: 'profile_image', headerName: 'Profile Image', flex: 1,sortable:false,
+    { field: 'profile_image', headerName: 'Profile Image', width:200 ,maxWidth: 200,sortable:false,
       renderCell:(params) => (
         <div className='h-11 w-11 overflow-hidden rounded-full'>
             <img src={params.row.profile_image} alt={params.row.id} className='w-full h-full object-cover'/>
         </div>
       )
     },
-    { field: 'username', headerName: 'Username',flex: 1,
+    { field: 'name', headerName: 'Name',flex: 1,
       renderCell:(params) =>(
-        <span>{params.row.username}</span>
+        <span>{params.row.name}</span>
       )
     },
     { field: 'email', headerName: 'Email Address',flex: 1,
@@ -29,26 +29,11 @@ const columns= [
         )
     },
     {
-      field: 'phone_no',
-      headerName: 'Phone Number', flex: 1,
-      renderCell: (params) => (
-        <span>{params.row.phone_no}</span>
-      ),
-    },
-    {
       field: 'role',
       headerName: 'Role',
       flex: 1,
       renderCell: (params) => (
         <span>{params.row.role}</span>
-      ),
-    },
-    {
-      field: 'location',
-      headerName: 'Location',
-      flex: 1,
-      renderCell: (params) => (
-        <span>{params.row.location}</span>
       ),
     },
     {
@@ -94,7 +79,7 @@ const columns= [
 
 
 function ManageUsers({data}){
-    const [query,setQuery] = useState("");    
+  
 
     return(
     <div className="px-4 py-6 text-sm">
@@ -111,7 +96,7 @@ function ManageUsers({data}){
 
         <div className="bg-white rounded-md mt-6 p-5 shadow-md">
             
-            <Table columns={columns} data={data} />
+            <Table columns={columns} entity={'user'}/>
         </div>
     </div>
     ) 

@@ -8,9 +8,9 @@ axios.defaults.baseURL = BASE_URL;
 axios.defaults.withCredentials = true;
 
 const request = {
-  create: async ({ entity, jsonData }) => {
+  create: async ({ entity, jsonData,headers }) => {
     try {
-      const response = await axios.post(entity, jsonData);
+      const response = await axios.post(entity, jsonData,{ headers:headers });
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
@@ -20,11 +20,12 @@ const request = {
       return errorHandler(error);
     }
   },
-  createAndUpload: async ({ entity, jsonData }) => {
+  createAndUpload: async ({ entity, jsonData,headers }) => {
     try {
       const response = await axios.post(entity, jsonData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          ...headers
         },
       });
       successHandler(response, {
@@ -36,9 +37,9 @@ const request = {
       return errorHandler(error);
     }
   },
-  read: async ({ entity, id }) => {
+  read: async ({ entity, id , headers }) => {
     try {
-      const response = await axios.get(entity + id);
+      const response = await axios.get(entity + id,{ headers:headers });
       successHandler(response, {
         notifyOnSuccess: false,
         notifyOnFailed: true,
@@ -48,9 +49,9 @@ const request = {
       return errorHandler(error);
     }
   },
-  update: async ({ entity, id, jsonData }) => {
+  update: async ({ entity, id, jsonData,headers }) => {
     try {
-      const response = await axios.patch(entity + id, jsonData);
+      const response = await axios.patch(entity + id, jsonData,{ headers:headers });
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
@@ -60,11 +61,12 @@ const request = {
       return errorHandler(error);
     }
   },
-  updateAndUpload: async ({ entity, id, jsonData }) => {
+  updateAndUpload: async ({ entity, id, jsonData,headers }) => {
     try {
       const response = await axios.patch(entity  + id, jsonData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          ...headers
         },
       });
       successHandler(response, {
@@ -77,9 +79,9 @@ const request = {
     }
   },
 
-  delete: async ({ entity, id }) => {
+  delete: async ({ entity, id,headers }) => {
     try {
-      const response = await axios.delete(entity + id);
+      const response = await axios.delete(entity + id,{ headers:headers });
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
@@ -90,13 +92,13 @@ const request = {
     }
   },
 
-  filter: async ({ entity, options = {} }) => {
+  filter: async ({ entity, headers, options = {} }) => {
     try {
       let filter = options.filter ? 'filter=' + options.filter : '';
       let equal = options.equal ? '&equal=' + options.equal : '';
       let query = `?${filter}${equal}`;
 
-      const response = await axios.get(entity + '/filter' + query);
+      const response = await axios.get(entity + '/filter' + query,{ headers:headers });
       successHandler(response, {
         notifyOnSuccess: false,
         notifyOnFailed: false,
@@ -107,7 +109,7 @@ const request = {
     }
   },
 
-  search: async ({ entity, options = {} }) => {
+  search: async ({ entity, headers,options = {} }) => {
     try {
       let query = '?';
       for (var key in options) {
@@ -115,7 +117,7 @@ const request = {
       }
       query = query.slice(0, -1);
       // headersInstance.cancelToken = source.token;
-      const response = await axios.get(entity + '/search' + query);
+      const response = await axios.get(entity + '/search' + query,{ headers:headers });
 
       successHandler(response, {
         notifyOnSuccess: false,
@@ -127,7 +129,31 @@ const request = {
     }
   },
 
-  list: async ({ entity, options = {} }) => {
+  list: async ({ entity, token,options = {} }) => {
+    try {
+      console.log(token)
+      let query = '?';
+      for (var key in options) {
+        query += key + '=' + options[key] + '&';
+      }
+      query = query.slice(0, -1);
+
+      const response = await axios.get(entity + '/list' + query,{
+        headers:{
+          'Authorization':`Bearer ${token}`
+        }
+      });
+
+      successHandler(response, {
+        notifyOnSuccess: false,
+        notifyOnFailed: false,
+      });
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+  listAll: async ({ entity,headers, options = {} }) => {
     try {
       let query = '?';
       for (var key in options) {
@@ -135,26 +161,7 @@ const request = {
       }
       query = query.slice(0, -1);
 
-      const response = await axios.get(entity + '/list' + query);
-
-      successHandler(response, {
-        notifyOnSuccess: false,
-        notifyOnFailed: false,
-      });
-      return response.data;
-    } catch (error) {
-      return errorHandler(error);
-    }
-  },
-  listAll: async ({ entity, options = {} }) => {
-    try {
-      let query = '?';
-      for (var key in options) {
-        query += key + '=' + options[key] + '&';
-      }
-      query = query.slice(0, -1);
-
-      const response = await axios.get(entity + '/listAll' + query);
+      const response = await axios.get(entity + '/listAll' + query,{ headers:headers });
 
       successHandler(response, {
         notifyOnSuccess: false,
@@ -166,9 +173,9 @@ const request = {
     }
   },
 
-  post: async ({ entity, jsonData, notifyOnSuccess = false, notifyOnFailed = false }) => {
+  post: async ({ entity, jsonData, headers,notifyOnSuccess = false, notifyOnFailed = false }) => {
     try {
-      const response = await axios.post(entity, jsonData);
+      const response = await axios.post(entity, jsonData,{ headers:headers });
       
       successHandler(response, {
         notifyOnSuccess: notifyOnSuccess,
@@ -179,17 +186,17 @@ const request = {
       return errorHandler(error);
     }
   },
-  get: async ({ entity }) => {
+  get: async ({ entity,headers }) => {
     try {
-      const response = await axios.get(entity);
+      const response = await axios.get(entity,{ headers:headers });
       return response.data;
     } catch (error) {
       return errorHandler(error);
     }
   },
-  patch: async ({ entity, jsonData }) => {
+  patch: async ({ entity, jsonData,headers }) => {
     try {
-      const response = await axios.patch(entity, jsonData);
+      const response = await axios.patch(entity, jsonData,{ headers:headers });
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
@@ -200,11 +207,12 @@ const request = {
     }
   },
 
-  upload: async ({ entity, id, jsonData }) => {
+  upload: async ({ entity, id, jsonData , headers}) => {
     try {
       const response = await axios.patch(entity + '/upload/' + id, jsonData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          ...headers
         },
       });
       successHandler(response, {

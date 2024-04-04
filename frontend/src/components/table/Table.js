@@ -8,8 +8,11 @@ import {
   GridToolbarContainer,
   GridToolbarQuickFilter,
 } from "@mui/x-data-grid";
-import {  useState } from "react";
+import {  useCallback, useEffect, useState } from "react";
 import { Box, LinearProgress, styled } from "@mui/material";
+import request from "../../requests/request";
+import useAsyncRequest from "../../Hooks/useAsyncRequest";
+import { useSelector } from "react-redux";
 
 const PAGE_SIZE = 5;
 
@@ -129,21 +132,40 @@ function CustomToolBar() {
   );
 }
 
-function Table({ data, columns,isLoading,showToolbar=true,showCheckboxSelection = true,showPagination=false }) {
+function Table({entity, columns,showToolbar=true,showCheckboxSelection = false,showPagination=false }) {
 
   const [paginationModel, setPaginationModel] = useState({
-    page: 1, // Start from page 1 for DRF page number pagination
-    pageSize: PAGE_SIZE,
+    page: 1, 
+    pageSize: 5,
   });
 
-  
+
+  const { onRequest, isLoading, isSuccess, result } = useAsyncRequest();
+  const token = useSelector((state) => state.auth.current.user.jwt);
+
+  console.log((paginationModel.page) * paginationModel.pageSize )
+  const data = result?.users || [];
+  const rowCount = result?.rowCount || 0;
+
+  const getData = async (options,entity) =>{
+    return await request.list({entity,token,options});
+  }
   
 
-  const handlePaginationModelChange = (newPaginationModel) => {;
-    if (newPaginationModel.page === 0 || newPaginationModel.page !== paginationModel.page) {
-      setPaginationModel(newPaginationModel);
-    }
+  
+ 
+  const handelDataTableLoad = async (pagination) => {
+    const options = { limit: paginationModel.pageSize , offset: (paginationModel.page) * paginationModel.pageSize };
+    const callback = getData(options,entity);
+    onRequest(callback);
   };
+
+  useEffect(()=>{
+    handelDataTableLoad();
+  },[paginationModel])
+
+
+
   const gridConfig = {
     localeText: {
       toolbarExportCSV: '',
@@ -176,8 +198,8 @@ function Table({ data, columns,isLoading,showToolbar=true,showCheckboxSelection 
     disableColumnSelector: true,
     disableDensitySelector: true,
     paginationMode: 'server',
-    rowCount: PAGE_SIZE,
-    onPaginationModelChange: handlePaginationModelChange,
+    rowCount: rowCount,
+    onPaginationModelChange: setPaginationModel,
     paginationModel: paginationModel,
     loading: isLoading,
   };

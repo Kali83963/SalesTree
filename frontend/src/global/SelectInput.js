@@ -1,13 +1,13 @@
-import { Fragment } from "react";
+import { Fragment, forwardRef } from "react";
 import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Controller } from "react-hook-form";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-function SelectInput({ data, control, name }) {
+const SelectInput = forwardRef(({ data, control, name }, ref) => {
 
   var dataList;
   if (!Array.isArray(data)) {
@@ -81,6 +81,6 @@ function SelectInput({ data, control, name }) {
       )}
     />
   );
-}
+});
 
 export default SelectInput;

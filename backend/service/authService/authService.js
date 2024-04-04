@@ -113,7 +113,8 @@ const loginUser = async (body, res) => {
             id: user.rows[0].id,
             name: user.rows[0].name,
             email: user.rows[0].email,
-            company:user.rows[0].company_name
+            company:user.rows[0].company_name,
+            role: !employee.rowCount ? "owner" : employee.rows[0].role,
         }
     }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
 

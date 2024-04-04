@@ -7,6 +7,7 @@ const validateToken = require('../../middleware/validateToken');
 const router = express.Router();
 
 router.post('/create',singleStorageUpload({ entity:'users',fieldName:'photo',fileType:'image'}),validateToken,userController.createContoller);
+router.get('/list',validateToken,userController.paginatedListController);
 
 
 

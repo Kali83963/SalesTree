@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router-dom";
 
-import DummyData from './users.json';
 import { useState } from "react";
 import { lazy } from 'react';
 
@@ -14,20 +13,19 @@ const AddSupplierForm = lazy(() => import("./AddSupplierForm"));
 
 
 export  function PeopleRouter(){
-    const data = DummyData.slice(0,100);
-    const [userData,setUserData] = useState(data);
+    
 
 
     return(
         <>
             <Routes>
-                <Route path="/manageuser" element={<ManageUsers data={userData} />}/>
-                <Route path="/user/add" element={<AddUserForm data={userData} onAddUser={setUserData} />}/>
-                <Route path="/user/edit/:id" element={<AddUserForm data={userData} onAddUser={setUserData} />}/>
+                <Route path="/manageuser" element={<ManageUsers />}/>
+                <Route path="/user/add" element={<AddUserForm entity={`user/create`}  />}/>
+                <Route path="/user/edit/:id" element={<AddUserForm entity={`user/edit/:id`} editing={true} />}/>
                 <Route path="/customer" element={<Customer />}/>
                 <Route path="/supplier" element={<Supplier />}/>
-                <Route path="/supplier/add" element={<AddSupplierForm data={userData} onAddUser={setUserData} />}/>
-                <Route path="/supplier/edit/:id" element={<AddSupplierForm data={userData} onAddUser={setUserData} />}/>
+                <Route path="/supplier/add" element={<AddSupplierForm  />}/>
+                <Route path="/supplier/edit/:id" element={<AddSupplierForm  />}/>
                 <Route path="/*" element={<h1>Not found</h1>}/>                
             </Routes>
 
