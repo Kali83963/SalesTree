@@ -8,9 +8,12 @@ axios.defaults.baseURL = BASE_URL;
 axios.defaults.withCredentials = true;
 
 const request = {
-  create: async ({ entity, jsonData,headers }) => {
+  create: async ({ entity, jsonData,token,headers }) => {
     try {
-      const response = await axios.post(entity, jsonData,{ headers:headers });
+      const response = await axios.post(entity, jsonData,{ headers:{
+        'Authorization':`Bearer ${token}`,
+        ...headers
+      } });
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
@@ -20,11 +23,12 @@ const request = {
       return errorHandler(error);
     }
   },
-  createAndUpload: async ({ entity, jsonData,headers }) => {
+  createAndUpload: async ({ entity, jsonData,token,headers }) => {
     try {
       const response = await axios.post(entity, jsonData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization':`Bearer ${token}`,
           ...headers
         },
       });
@@ -61,11 +65,12 @@ const request = {
       return errorHandler(error);
     }
   },
-  updateAndUpload: async ({ entity, id, jsonData,headers }) => {
+  updateAndUpload: async ({ entity, id, jsonData,token,headers }) => {
     try {
-      const response = await axios.patch(entity  + id, jsonData, {
+      const response = await axios.patch(entity  + "/" + id, jsonData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization':`Bearer ${token}`,
           ...headers
         },
       });
@@ -79,9 +84,14 @@ const request = {
     }
   },
 
-  delete: async ({ entity, id,headers }) => {
+  delete: async ({ entity, id,token,headers }) => {
     try {
-      const response = await axios.delete(entity + id,{ headers:headers });
+      const response = await axios.delete(entity + "/" + id,{ 
+        headers:{
+          'Authorization':`Bearer ${token}`,
+          ...headers
+        } 
+      });
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
@@ -109,7 +119,8 @@ const request = {
     }
   },
 
-  search: async ({ entity, headers,options = {} }) => {
+  search: async ({ entity, token,headers,options = {} }) => {
+    console.log(entity)
     try {
       let query = '?';
       for (var key in options) {
@@ -117,7 +128,11 @@ const request = {
       }
       query = query.slice(0, -1);
       // headersInstance.cancelToken = source.token;
-      const response = await axios.get(entity + '/search' + query,{ headers:headers });
+      const response = await axios.get(entity + '/search/' + query,{ 
+        headers:{
+          'Authorization':`Bearer ${token}`,
+          ...headers
+        } });
 
       successHandler(response, {
         notifyOnSuccess: false,
@@ -131,7 +146,6 @@ const request = {
 
   list: async ({ entity, token,options = {} }) => {
     try {
-      console.log(token)
       let query = '?';
       for (var key in options) {
         query += key + '=' + options[key] + '&';
@@ -186,9 +200,11 @@ const request = {
       return errorHandler(error);
     }
   },
-  get: async ({ entity,headers }) => {
+  get: async ({ entity,token }) => {
     try {
-      const response = await axios.get(entity,{ headers:headers });
+      const response = await axios.get(entity,{ headers:{
+        Authorization: `Bearer ${token}`
+      } });
       return response.data;
     } catch (error) {
       return errorHandler(error);

@@ -34,7 +34,7 @@ function Window({children,name}){
 
     return(
         createPortal(
-            <div className="fixed top-0 left-0 w-full h-full bg-gray-600 bg-opacity-25 z-50 flex items-center justify-center" ref={ref}>
+            <div className="fixed top-0 left-0 w-full h-full bg-gray-600 bg-opacity-25 z-50 flex items-center justify-center" ref={ref} style={{minWidth:'320px'}}>
                 <div className="bg-white rounded-xl p-4 w-2/6 h-64 flex flex-col items-center gap-4">
                     <button onClick={close} className="text-red-500 w-7 self-end">
                         <XMarkIcon />

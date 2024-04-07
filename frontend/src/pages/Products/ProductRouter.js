@@ -18,8 +18,9 @@ export function ProductRouter(){
     return(
         <>
             <Routes>
-                <Route path="/category" element={<Category />}/>
-                <Route path="/category/add" element={<AddCategoryForm />}/>
+                <Route path="/category" element={<Category  entity={'products/category'}/>}/>
+                <Route path="/category/add" element={<AddCategoryForm entity={'products/category/create'} />}/>
+                <Route path="/category/edit/:id" element={<AddCategoryForm entity={'products/category'} isEditing={true}/>}/>
                 <Route path="/subcategory" element={<SubCategory />}/>
                 <Route path="/subcategory/add" element={<AddSubCategoryForm />}/>
                 <Route path="/product" element={<Products />}/>

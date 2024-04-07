@@ -7,9 +7,8 @@ export default function useAsyncRequest() {
 
   let onRequest = async (callback) => {
     setIsLoading(true);
-
     const data = await callback;
-    console.log(data)
+
     setResult(data);
     if (data && data.success === true) {
       setIsSuccess(true);

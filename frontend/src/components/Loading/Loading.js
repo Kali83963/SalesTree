@@ -5,7 +5,7 @@ export default function Loading({ isLoading, children }) {
   const antIcon = <LoadingOutlined style={{ fontSize: 35 }} spin />;
 
   return (
-    <Spin indicator={antIcon} spinning={isLoading} style={{maxHeight:'100vh'}}>
+    <Spin indicator={antIcon} spinning={isLoading} style={{ maxHeight: '100vh' }}>
       {children}
     </Spin>
   );

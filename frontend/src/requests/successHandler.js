@@ -2,7 +2,7 @@ import {toast } from 'react-toastify';
 
 
 const successHandler = (response, options = { notifyOnSuccess: false, notifyOnFailed: true }) => {
-  console.log(response)
+  // console.log(response)
     const { data } = response;
     if (data && data.success === true) {
       
@@ -12,7 +12,7 @@ const successHandler = (response, options = { notifyOnSuccess: false, notifyOnFa
     //   const successText = message ;
   
       if (options.notifyOnSuccess) {
-        console.log(message)
+        // console.log(message)
         toast.success(message);
       }
     } else {

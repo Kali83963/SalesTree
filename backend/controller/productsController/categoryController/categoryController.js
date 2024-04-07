@@ -1,4 +1,4 @@
-const service = require("../../service/userService/userService");
+const service = require("../../../service/productsService/categoryService/categoryService");
 
 const createContoller = async (req, res) => {
     try{
@@ -16,7 +16,7 @@ const getController =  async (req, res) => {
         const params = req.params;
         const createdBy = req.user;
         
-        const response = await service.userDetails(params, createdBy);
+        const response = await service.detailsService(params, createdBy);
         res.status(201).json(response);
     } catch (error) {
         res.status(400).json({ message: error.message });

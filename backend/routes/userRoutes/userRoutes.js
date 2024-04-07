@@ -8,6 +8,11 @@ const router = express.Router();
 
 router.post('/create',singleStorageUpload({ entity:'users',fieldName:'photo',fileType:'image'}),validateToken,userController.createContoller);
 router.get('/list',validateToken,userController.paginatedListController);
+router.get('/search',validateToken,userController.searchController);
+router.get('/:id',validateToken,userController.getController);
+router.patch('/:id',singleStorageUpload({ entity:'users',fieldName:'photo',fileType:'image'}),validateToken,userController.editController);
+router.delete('/:id',validateToken,userController.deleteController);
+
 
 
 

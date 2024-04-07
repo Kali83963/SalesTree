@@ -7,53 +7,22 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import { useEffect, useState } from "react";
 
 const columns= [
-    { field: 'category_name', headerName: 'Category Name', flex:1 ,
+    { field: 'name', headerName: 'Category Name', flex:1 ,
       renderCell:(params) => (
-       <span>{params.row.category_name}</span>
+       <span>{params.row.name}</span>
       )
     },
     { field: 'description', headerName: 'Description', flex:1,
       renderCell:(params) =>(
         <span>{params.row.description}</span>
       )
-    },
-    {
-      field: 'action',
-      headerName: 'Action',
-      sortable:false,
-      renderCell: (params) => (
-        <div className='flex items-center justify-between gap-2'>
-            <Modal>
-                <Modal.Open opens='delete-form'>
-                    <button className='bg-[#ff3a31] text-white rounded-md p-1' >
-                        <DeleteOutlineOutlinedIcon />
-                        
-                    </button>
-                </Modal.Open>
-                <Modal.Window name='delete-form'>
-                    <ConfirmDelete />
-                </Modal.Window>
-            </Modal>
-            <Link className='bg-primary text-white text-sm rounded-md p-1' to={`/people/user/edit/${params.row.id}`}>
-
-                <CreateIcon />
-            </Link>
-        </div>
-        ),
-    },
+    }
 
   ];
 
 
-function Category(){ 
-
-    const {pageNumber,setPageNumber} = useState(0)
-
+function Category({entity}){ 
     
-    useEffect(function(){
-
-    },[pageNumber])
-
     return(
     <div className="px-4 py-6 text-sm">
         <div className="flex item-center justify-between flex-wrap gap-4">
@@ -69,7 +38,7 @@ function Category(){
 
         <div className="bg-white rounded-md mt-6 p-5 shadow-md">
             
-            <Table columns={columns} data={[]} />
+            <Table columns={columns} entity={entity} editPath={entity} />
         </div>
     </div>
     )

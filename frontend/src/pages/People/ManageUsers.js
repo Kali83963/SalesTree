@@ -1,22 +1,33 @@
 import './manageUser.css';
-import CreateIcon from "@mui/icons-material/Create";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+
 import Table from '../../components/table/Table';
-import Modal from '../../global/Modal';
 
 import { useState } from 'react';
 
 import { Link } from "react-router-dom";
-import ConfirmDelete from '../../global/ConfirmDelete';
+import { IMAGE_BASE_URL } from '../../utils/BASE_CONFIG';
 
 
 const columns= [
     { field: 'profile_image', headerName: 'Profile Image', width:200 ,maxWidth: 200,sortable:false,
-      renderCell:(params) => (
-        <div className='h-11 w-11 overflow-hidden rounded-full'>
-            <img src={params.row.profile_image} alt={params.row.id} className='w-full h-full object-cover'/>
+      renderCell:(params) => {
+        const url = params.row.profile_image !== 'undefined'  ? IMAGE_BASE_URL + params.row.profile_image.replace('public/', '') : null;
+
+        return (
+        <div className="h-11 w-11 overflow-hidden rounded-full">
+          {params.row.profile_image !== 'undefined' ? (
+            <img
+              src={url}
+              alt={params.row.id}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex justify-center items-center text-white bg-gray-400">
+              {params.row.name.charAt(0)}
+            </div>
+          )}
         </div>
-      )
+      )}
     },
     { field: 'name', headerName: 'Name',flex: 1,
       renderCell:(params) =>(
@@ -43,31 +54,6 @@ const columns= [
         <span className={`${ params.row.Status ? "text-green-400": 'text-gray-500'} before:content-['•'] before:mr-1 before:text-lg before:scale-[4]`}>{params.row.Status ? "Active" : "Inactive"}</span>
       ),
     },
-    {
-      field: 'action',
-      headerName: 'Action',
-      sortable:false,
-      renderCell: (params) => (
-        <div className='flex items-center justify-between gap-2'>
-            <Link className='bg-primary text-white text-sm rounded-md p-1' to={`/people/user/edit/${params.row.id}`}>
-
-                <CreateIcon />
-            </Link>
-            <Modal>
-                <Modal.Open opens='delete-form'>
-                    <button className='bg-[#ff3a31] text-white rounded-md p-1' >
-                        <DeleteOutlineOutlinedIcon />
-                        
-                    </button>
-                </Modal.Open>
-                <Modal.Window name='delete-form'>
-                    <ConfirmDelete />
-                </Modal.Window>
-            </Modal>
-        </div>
-        ),
-    },
-
   ];
 
   
@@ -78,7 +64,8 @@ const columns= [
 
 
 
-function ManageUsers({data}){
+function ManageUsers(){
+
   
 
     return(
@@ -95,8 +82,9 @@ function ManageUsers({data}){
         </div>
 
         <div className="bg-white rounded-md mt-6 p-5 shadow-md">
+            <Table columns={columns} entity={'user'} editPath={'/people/user'}/>
+          
             
-            <Table columns={columns} entity={'user'}/>
         </div>
     </div>
     ) 

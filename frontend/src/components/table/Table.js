@@ -8,17 +8,23 @@ import {
   GridToolbarContainer,
   GridToolbarQuickFilter,
 } from "@mui/x-data-grid";
+import CreateIcon from "@mui/icons-material/Create";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import ConfirmDelete from '../../global/ConfirmDelete';
+import Modal from '../../global/Modal';
+
 import {  useCallback, useEffect, useState } from "react";
 import { Box, LinearProgress, styled } from "@mui/material";
 import request from "../../requests/request";
 import useAsyncRequest from "../../Hooks/useAsyncRequest";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
-const PAGE_SIZE = 5;
+// const PAGE_SIZE = 5;
 
-const SERVER_OPTIONS = {
-  useCursorPagination: false, // Set to false for page number pagination
-};
+// const SERVER_OPTIONS = {
+//   useCursorPagination: false, // Set to false for page number pagination
+// };
 
 
 const StyledGridOverlay = styled('div')(({ theme }) => ({
@@ -102,9 +108,9 @@ function CustomToolBar() {
       <GridToolbarContainer
         sx={{ display: "flex", justifyContent: "space-between" }}
       >
-        <GridToolbarQuickFilter />
+        <GridToolbarQuickFilter debounceMs={500}  />
         <div className="flex">
-          <GridPrintExportMenuItem
+          {/* <GridPrintExportMenuItem
             sx={{
               height: "50px",
               width: "50px",
@@ -113,8 +119,8 @@ function CustomToolBar() {
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
             }}
-          />
-          <GridCsvExportMenuItem
+          /> */}
+          {/* <GridCsvExportMenuItem
             sx={{
               height: "50px",
               width: "50px",
@@ -123,7 +129,7 @@ function CustomToolBar() {
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
             }}
-          />
+          /> */}
         </div>
       </GridToolbarContainer>
       <br />
@@ -132,37 +138,104 @@ function CustomToolBar() {
   );
 }
 
-function Table({entity, columns,showToolbar=true,showCheckboxSelection = false,showPagination=false }) {
+function Table({entity, columns,editPath,showToolbar=true,showCheckboxSelection = false,showPagination=false }) {
 
   const [paginationModel, setPaginationModel] = useState({
-    page: 1, 
+    page: 0, 
     pageSize: 5,
   });
+
+  const [query,setQuery] = useState(null);
 
 
   const { onRequest, isLoading, isSuccess, result } = useAsyncRequest();
   const token = useSelector((state) => state.auth.current.user.jwt);
 
-  console.log((paginationModel.page) * paginationModel.pageSize )
-  const data = result?.users || [];
+  console.log(result)
+
+  const data = result?.rows || [];
   const rowCount = result?.rowCount || 0;
 
   const getData = async (options,entity) =>{
     return await request.list({entity,token,options});
   }
-  
 
-  
- 
+  const deleteRequest = async(entity,id)=>{
+    return await request.delete({entity,id,token});
+  }
+
+
+  const searchRequest = async (entity,options) =>{
+    console.log(entity)
+    
+    return await request.search({entity,token,options})
+  }
+
   const handelDataTableLoad = async (pagination) => {
     const options = { limit: paginationModel.pageSize , offset: (paginationModel.page) * paginationModel.pageSize };
     const callback = getData(options,entity);
     onRequest(callback);
   };
 
+  const handleDelete = async (id)=>{
+    await onRequest(deleteRequest(entity,id));
+    setPaginationModel((state) => ({...state,page:0}));
+    await handelDataTableLoad();
+  };
+
+  const handleSearch = async ()=>{
+    const options = { query:query,limit: paginationModel.pageSize , offset: (paginationModel.page) * paginationModel.pageSize };
+    const callback = searchRequest(entity,options);
+    onRequest(callback);
+  }
+
+  const onFilterChange = useCallback((filterModel) => {
+    // Here you save the data you need from the filter model
+    const filteredValue = filterModel.quickFilterValues[0];
+    setQuery(filteredValue);
+    setPaginationModel((state)=>({...state,page:0}));
+  }, []);
+  
+
+  const updatedColumn = [
+    ...columns,
+    {
+      field: 'action',
+      headerName: 'Action',
+      sortable:false,
+      renderCell: (params) => (
+        <div className='flex items-center justify-between gap-2'>
+            <Link className='bg-primary text-white text-sm rounded-md p-1' to={`${editPath}/edit/${params.row.id}`}>
+                <CreateIcon />
+            </Link>
+            <Modal>
+                <Modal.Open opens='delete-form'>
+                    <button className='bg-[#ff3a31] text-white rounded-md p-1' >
+                        <DeleteOutlineOutlinedIcon />
+                    </button>
+                </Modal.Open>
+                <Modal.Window name='delete-form'>
+                    <ConfirmDelete id={params.row.id} handleDelete={handleDelete}  />
+                </Modal.Window>
+            </Modal>
+        </div>
+        ),
+    }, 
+  ]
+  
+
+  
+ 
+
+
   useEffect(()=>{
-    handelDataTableLoad();
-  },[paginationModel])
+    if(query){
+      handleSearch();
+    }else{
+      handelDataTableLoad();
+    }
+  },[paginationModel,query])
+
 
 
 
@@ -173,8 +246,9 @@ function Table({entity, columns,showToolbar=true,showCheckboxSelection = false,s
     },
     sx: { border: 'none' },
     rows: data,
+    rowCount: rowCount,
     getRowId: (row) => row.id,
-    columns: columns,
+    columns: updatedColumn,
     initialState: {
       pagination: {
         paginationModel: { page: 1, pageSize: 5 },
@@ -198,19 +272,15 @@ function Table({entity, columns,showToolbar=true,showCheckboxSelection = false,s
     disableColumnSelector: true,
     disableDensitySelector: true,
     paginationMode: 'server',
-    rowCount: rowCount,
+    filterMode:"server",
     onPaginationModelChange: setPaginationModel,
+    onFilterModelChange:onFilterChange,
     paginationModel: paginationModel,
     loading: isLoading,
+    useCursorPagination:false
   };
 
-  if (showCheckboxSelection) {
-    gridConfig.checkboxSelection = true;
-  }
-
-  if(showPagination){
-    gridConfig.pagination = false
-  }
+  
   return (
     <DataGrid {...gridConfig} />
   );

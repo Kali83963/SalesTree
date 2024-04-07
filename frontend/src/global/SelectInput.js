@@ -25,7 +25,7 @@ const SelectInput = forwardRef(({ data, control, name }, ref) => {
           {({ open }) => (
             <>
               <div className="relative">
-                <Listbox.Button className="relative w-full cursor-pointer rounded-md bg-[#F5F7F9] p-3 text-sm border-[#E5E5E5] py-2 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-6">
+                <Listbox.Button className="relative w-full cursor-pointer rounded-md bg-[#F5F7F9] p-3 text-sm border-[#E5E5E5] py-2 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 sm:text-sm sm:leading-8">
                   <span className="flex items-center">
                     <span
                       className={
