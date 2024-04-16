@@ -10,7 +10,7 @@ function classNames(...classes) {
 const SelectInput = forwardRef(({ data, control, name }, ref) => {
 
   var dataList;
-  if (!Array.isArray(data)) {
+  if (data && !Array.isArray(data)) {
     dataList = Object.keys(data);
   } else {
     dataList = data;

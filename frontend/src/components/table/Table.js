@@ -205,7 +205,7 @@ function Table({entity, columns,editPath,showToolbar=true,showCheckboxSelection 
       sortable:false,
       renderCell: (params) => (
         <div className='flex items-center justify-between gap-2'>
-            <Link className='bg-primary text-white text-sm rounded-md p-1' to={`${editPath}/edit/${params.row.id}`}>
+            <Link className='bg-primary text-white text-sm rounded-md p-1' to={`/${editPath}/edit/${params.row.id}`}>
                 <CreateIcon />
             </Link>
             <Modal>

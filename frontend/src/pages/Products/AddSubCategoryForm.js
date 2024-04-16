@@ -1,18 +1,50 @@
 import { TextareaAutosize } from '@mui/material';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import SelectInput from '../../global/SelectInput';
+import useAsyncRequest from '../../Hooks/useAsyncRequest';
+import request from '../../requests/request';
+import { useSelector } from "react-redux";
+import { useNavigate,useParams } from "react-router-dom";
+import Loading from '../../components/Loading/Loading';
+import useEntityForm from '../../Hooks/useEntityForm';
 
-function AddSubCategoryForm() {
-    var category = null;
+
+function AddSubCategoryForm({ entity, isEditing }) {
+    let { id } = useParams();
+ 
+    const token = useSelector((state) => state.auth.current.user.jwt);
+    const { result, onSubmit, isLoading, isSuccess } = useEntityForm({  entity, id, isEditing });
     const { register, handleSubmit, reset, getValues,setValue, formState, control } =useForm({
-        defaultValues: category ? category : {} 
+        values:result || null
     });
+    const navigate = useNavigate();
 
-    function onSubmitLogin(data) {
-        console.log(data);
-    }
+    const { result:category, isLoading:loading, isSuccess: success, onRequest} = useAsyncRequest();
+
+    useEffect(function(){
+        const req = request.listAll({entity:'products/category',token})
+        onRequest(req)
+    },[]);
+
+    
+
+
+    useEffect(
+        function () {
+          if (isSuccess && isEditing) {
+            navigate(-1);
+            
+          }else if(isSuccess){
+            reset();
+          }
+    
+        },
+        [isSuccess]
+      );
+
     return (
+        <Loading isLoading={loading || isLoading}>
         <div className="px-4 py-6 text-sm">
             <div className="flex item-center justify-between">
               <div className="text-start">
@@ -21,7 +53,7 @@ function AddSubCategoryForm() {
               </div>
             </div>
             <div className="bg-white rounded-md mt-6 p-5 shadow-md">
-              <form className="w-full flex md:flex-row flex-wrap gap-4 max-w-xl" onSubmit={handleSubmit(onSubmitLogin)}>
+              <form className="w-full flex md:flex-row flex-wrap gap-4 max-w-xl" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col items-start justify-start gap-1 mt-5 md:flex-1 basis-full">
                     <label
                         htmlFor="category_name"
@@ -31,7 +63,7 @@ function AddSubCategoryForm() {
                     </label>
                     <div className="relative w-full">
                         <SelectInput
-                        data={["Electronics", "Fruit","Appliances","Utensils"]}
+                        data={category?.rows || []}
                         control={control}
                         name="category"
                         {...register("category", {
@@ -54,7 +86,7 @@ function AddSubCategoryForm() {
                         placeholder="Sub Category name"
                         className="bg-[#F5F7F9] p-3 text-sm border border-[#E5E5E5] rounded-md w-full outline-none"
                         required={true}
-                        {...register("sub_category", {
+                        {...register("name", {
                             required: "This field is required",
                         })}
                         />
@@ -80,12 +112,13 @@ function AddSubCategoryForm() {
                 </div>
                 <div className="flex gap-4">
                   <button className="bg-primary flex items-center text-sm text-white rounded-md px-8 py-3 shadow-md">Save</button>
-                  <button className="bg-white text-primary border text-sm rounded-md border-primary px-8 py-3 shadow-md">Cancel</button>
+                  <button className="bg-white text-primary border text-sm rounded-md border-primary px-8 py-3 shadow-md" onClick={()=>navigate(-1)}>Cancel</button>
                 </div>
               </form>
     
             </div>
         </div>
+        </Loading>
       )
 }
 

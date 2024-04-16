@@ -53,3 +53,21 @@ CREATE TABLE category (
     FOREIGN KEY (created_user) REFERENCES users (ID) ON DELETE CASCADE,
     FOREIGN KEY (company_id) REFERENCES company (ID) ON DELETE CASCADE
 );
+
+
+
+CREATE TABLE sub_category (
+    ID serial PRIMARY KEY,
+    name varchar(255) NOT NULL,
+    description TEXT NOT NULL,
+    created_user INT NOT NULL, -- Enclosed user in double quotes
+    company_id INT NOT NULL,
+    category INT NOT NULL,
+    FOREIGN KEY (created_user) REFERENCES users (ID) ON DELETE CASCADE, -- Enclosed user in double quotes
+    FOREIGN KEY (company_id) REFERENCES company (ID) ON DELETE CASCADE,
+    FOREIGN KEY (category) REFERENCES category (ID) ON DELETE CASCADE,
+    created_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp,
+    is_delete boolean default false
+);
+

@@ -10,9 +10,11 @@ const router = express.Router();
 router.post('/create',validateToken,permissionMiddleware,singleStorageUpload({ entity:'category',fieldName:'photo',fileType:'image'}),categoryController.createContoller);
 router.get('/list',validateToken,permissionMiddleware,categoryController.paginatedListController);
 router.get('/search',validateToken,permissionMiddleware,categoryController.searchController);
+router.get('/listAll',validateToken,permissionMiddleware,categoryController.ListController);
 router.get('/:id',validateToken,permissionMiddleware,categoryController.getController);
 router.patch('/:id',validateToken,permissionMiddleware,permissionMiddleware,singleStorageUpload({ entity:'category',fieldName:'photo',fileType:'image'}),categoryController.editController);
 router.delete('/:id',validateToken,permissionMiddleware,categoryController.deleteController);
+
 
 
 

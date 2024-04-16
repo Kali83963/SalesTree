@@ -167,7 +167,7 @@ const request = {
       return errorHandler(error);
     }
   },
-  listAll: async ({ entity,headers, options = {} }) => {
+  listAll: async ({ entity,token, options = {} }) => {
     try {
       let query = '?';
       for (var key in options) {
@@ -175,7 +175,9 @@ const request = {
       }
       query = query.slice(0, -1);
 
-      const response = await axios.get(entity + '/listAll' + query,{ headers:headers });
+      const response = await axios.get(entity + '/listAll' + query,{ headers:{
+        Authorization: `Bearer ${token}`
+      } });
 
       successHandler(response, {
         notifyOnSuccess: false,
