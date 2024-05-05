@@ -9,7 +9,7 @@ function FileInput({ onChange, value }) {
   if (value) {
     if (typeof value === "string") {
       // If value is a string, check if it's not equal to 'undefined'
-      if (value !== "undefined") {
+      if (value.trim() !== "undefined") {
         // Construct image URL from IMAGE_BASE_URL and value
         src = IMAGE_BASE_URL + value.replace("public/", "");
       } else {

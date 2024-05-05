@@ -1,6 +1,5 @@
 const bycrpt = require("bcryptjs");
 const db = require("../../../config/postgres");
-const jwt = require("jsonwebtoken");
 
 const createService = async (body, createdBy) => {
   if (!body.name || !body.description || !body.category) {

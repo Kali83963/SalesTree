@@ -4,7 +4,6 @@ const validatePassword = require('../../utlis/passwordValidator');
 const jwt = require('jsonwebtoken');
 const { emailClient, mailOptions } = require('../emailService/emailService');
 const { welcomeEmail, resetPasswordLink } = require('../../emailTemplate/emailTemplate');
-const { body } = require('express-validator');
 
 const registerUser = async (body,res)=>{
     
@@ -80,8 +79,6 @@ const registerUser = async (body,res)=>{
 
 const loginUser = async (body, res) => {
     const { email, password } = body;
-    console.log(email);
-    console.log(password);
     if (!email || !password) {
         throw new Error("Required fields are missing!");
     }

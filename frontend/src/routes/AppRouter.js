@@ -1,5 +1,4 @@
-import { useDispatch, useSelector } from "react-redux"
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import MainLayout from "../MainLayout";
 import { MainRouter } from "../pages/Dashboard/MainRouter";
 import { ProductRouter } from "../pages/Products/ProductRouter";

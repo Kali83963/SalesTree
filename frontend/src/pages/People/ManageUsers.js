@@ -82,7 +82,7 @@ function ManageUsers(){
         </div>
 
         <div className="bg-white rounded-md mt-6 p-5 shadow-md">
-            <Table columns={columns} entity={'user'} editPath={'/people/user'}/>
+            <Table columns={columns} entity={'/user'} editPath={'people/user'}/>
           
             
         </div>

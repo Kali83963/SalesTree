@@ -1,19 +1,32 @@
 import { Link } from "react-router-dom";
 import Table from "../../components/table/Table";
-import Modal from "../../global/Modal";
-import ConfirmDelete from "../../global/ConfirmDelete";
-import CreateIcon from "@mui/icons-material/Create";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import { IMAGE_BASE_URL } from '../../utils/BASE_CONFIG';
+
 
 const columns= [
-    { field: 'manufacture_image', headerName: 'Manufacture Image', flex:1 ,
-      renderCell:(params) => (
-       <span>{params.row.manufacture_image}</span>
-      )
+    { field: 'image', headerName: 'Manufacture Image', flex:1 ,
+      renderCell:(params) => {
+        const url = params.row.images !== 'undefined'  ? IMAGE_BASE_URL + params.row.image.replace('public/', '') : null;
+        console.log(params)
+        return (
+        <div className="h-11 w-11 overflow-hidden rounded-full">
+          {params.row.image.trim() !== "undefined" ? (
+            <img
+              src={url}
+              alt={params.row.id}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex justify-center items-center text-white bg-gray-400">
+              {params.row.name.slice(0,2).toUpperCase()}
+            </div>
+          )}
+        </div>)}
+      
     },
-    { field: 'manufacture_name', headerName: 'Manufacture Name', flex:1 ,
+    { field: 'name', headerName: 'Manufacture Name', flex:1 ,
       renderCell:(params) => (
-       <span>{params.row.manufacture_name}</span>
+       <span>{params.row.name}</span>
       )
     },
     { field: 'description', headerName: 'Manufacture Description', flex:1,
@@ -21,33 +34,9 @@ const columns= [
         <span>{params.row.description}</span>
       )
     },
-    {
-      field: 'action',
-      headerName: 'Action',
-      sortable:false,
-      renderCell: (params) => (
-        <div className='flex items-center justify-between gap-2'>
-            <Modal>
-                <Modal.Open opens='delete-form'>
-                    <button className='bg-[#ff3a31] text-white rounded-md p-1' >
-                        <DeleteOutlineOutlinedIcon />
-                        
-                    </button>
-                </Modal.Open>
-                <Modal.Window name='delete-form'>
-                    <ConfirmDelete />
-                </Modal.Window>
-            </Modal>
-            <Link className='bg-primary text-white text-sm rounded-md p-1' to={`/people/user/edit/${params.row.id}`}>
-
-                <CreateIcon />
-            </Link>
-        </div>
-        ),
-    },
 
   ];
-function Manufacture(){
+function Manufacture({entity}){
     return(
         <div className="px-4 py-6 text-sm">
             <div className="flex item-center justify-between flex-wrap gap-4">
@@ -63,7 +52,7 @@ function Manufacture(){
     
             <div className="bg-white rounded-md mt-6 p-5 shadow-md">
                 
-                <Table columns={columns} data={[]} />
+                <Table columns={columns} entity={entity} editPath={entity} />
             </div>
         </div>
         )

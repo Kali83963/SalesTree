@@ -52,6 +52,7 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
 }));
 
 export function CustomNoRowsOverlay({width=1200,text}) {
+  console.log(1)
   return (
     <>
     <StyledGridOverlay>
@@ -151,8 +152,6 @@ function Table({entity, columns,editPath,showToolbar=true,showCheckboxSelection 
   const { onRequest, isLoading, isSuccess, result } = useAsyncRequest();
   const token = useSelector((state) => state.auth.current.user.jwt);
 
-  console.log(result)
-
   const data = result?.rows || [];
   const rowCount = result?.rowCount || 0;
 
@@ -166,7 +165,6 @@ function Table({entity, columns,editPath,showToolbar=true,showCheckboxSelection 
 
 
   const searchRequest = async (entity,options) =>{
-    console.log(entity)
     
     return await request.search({entity,token,options})
   }
@@ -255,7 +253,7 @@ function Table({entity, columns,editPath,showToolbar=true,showCheckboxSelection 
       },
     },
     slots: {
-      noResultsOverlay: CustomNoRowsOverlay,
+      noRowsOverlay: CustomNoRowsOverlay,
       toolbar: showToolbar && CustomToolBar,
       loadingOverlay: LinearProgress,
     },

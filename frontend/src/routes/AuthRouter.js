@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { AccountRouter } from "../pages/Accounts/AccountRouter";
 import NotFound from "../pages/NotFound";
 

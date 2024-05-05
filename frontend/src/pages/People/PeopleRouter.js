@@ -20,8 +20,8 @@ export  function PeopleRouter(){
         <>
             <Routes>
                 <Route path="/manageuser" element={<ManageUsers />}/>
-                <Route path="/user/add" element={<AddUserForm entity={`user/create`}  />}/>
-                <Route path="/user/edit/:id" element={<AddUserForm entity={`user`} isEditing={true} />}/>
+                <Route path="/user/add" element={<AddUserForm entity={`/user/create`}  />}/>
+                <Route path="/user/edit/:id" element={<AddUserForm entity={`/user`} isEditing={true} />}/>
                 <Route path="/customer" element={<Customer />}/>
                 <Route path="/supplier" element={<Supplier />}/>
                 <Route path="/supplier/add" element={<AddSupplierForm  />}/>

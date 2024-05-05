@@ -71,3 +71,16 @@ CREATE TABLE sub_category (
     is_delete boolean default false
 );
 
+CREATE TABLE manufacture(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    company_id INT NOT NULL,
+    created_user INT NOT NULL,
+    FOREIGN KEY (created_user) REFERENCES users (ID) ON DELETE CASCADE,
+    FOREIGN KEY (company_id) REFERENCES company (ID) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_delete BOOLEAN DEFAULT FALSE,
+    image VARCHAR(255)
+);

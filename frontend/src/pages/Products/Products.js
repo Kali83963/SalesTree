@@ -55,48 +55,11 @@ const columns= [
       renderCell:(params) =>(
         <span>{params.row.sku}</span>
       )
-    },
-    { field: 'description', headerName: 'Description', flex:1,
-      renderCell:(params) =>(
-        <span>{params.row.description}</span>
-      )
-    },
-    {
-      field: 'action',
-      headerName: 'Action',
-      maxWidth:200,
-      minWidth:120,
-      sortable:false,
-      renderCell: (params) => (
-        <div className='flex items-centers gap-2'>
-            <Modal>
-                <Modal.Open opens='delete-form'>
-                    <button className='bg-[#ff3a31] text-white rounded-md p-1' >
-                        <DeleteOutlineOutlinedIcon />
-                        
-                    </button>
-                </Modal.Open>
-                <Modal.Window name='delete-form'>
-                    <ConfirmDelete />
-                </Modal.Window>
-            </Modal>
-            <Link className='bg-primary text-white text-sm rounded-md p-1' to={`/people/user/edit/${params.row.id}`}>
-
-                <CreateIcon />
-            </Link>
-            <Link to={`/products/product/detail/${params.row.id}`} className="bg-green-400 text-white text-sm rounded-md p-1">
-                 <VisibilityOutlinedIcon />
-            </Link>
-        </div>
-        ),
-    },
-
+    }
   ];
 
 
-const data = [{id:1,product_image:"https://images.unsplash.com/photo-1697898706719-bce6e007c817?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",product_name:"Iphone 14",category_name:"Electronics",subcategory_name:"Microwave",barcode:"978123456",manufacture_name:"Pearl Industries",price:"2,205",unit:"PC",sku:"PT009",description:"lorepusm"}]
-
-function Products(){
+function Products({entity}){
     return(
         <div className="px-4 py-6 text-sm">
             <div className="flex item-center justify-between flex-wrap gap-4">
@@ -112,7 +75,7 @@ function Products(){
     
             <div className="bg-white rounded-md mt-6 p-5 shadow-md">
                 
-                <Table columns={columns} data={data} />
+                <Table columns={columns} entity={entity} editPath={entity} />
             </div>
         </div>
         )
