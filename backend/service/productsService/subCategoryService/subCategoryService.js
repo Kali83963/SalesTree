@@ -253,6 +253,43 @@ const pagination = async (query, createdBy) => {
   };
 };
 
+const listService = async (query,createdBy) =>{
+
+  const { category: categoryName } = query;
+
+  const lowerCaseCategory = categoryName.toLowerCase().trim();
+
+  const company = await db.query(
+    `SELECT ID FROM company where name = '${createdBy.company}' AND is_delete = false`
+  );
+  const category = await db.query(
+    `SELECT * FROM category WHERE company_id = ${company.rows[0].id} AND name= '${lowerCaseCategory}' AND is_delete = false`
+  );
+  if(!category.rowCount){
+    console.lo
+    return {
+      rows:[]
+    }
+  }
+  console.log(categoryName)
+  console.log(category.rows)
+
+  const sub_category = await db.query(
+    `SELECT name FROM sub_category WHERE company_id = ${company.rows[0].id} AND category = ${category.rows[0].id} AND is_delete = false`
+  );
+
+  const subCategoryList = [];
+
+  sub_category.rows.map((val)=>{
+    subCategoryList.push(val.name);
+  })
+
+  return {
+    rows:subCategoryList
+  };
+}
+
+
 module.exports = {
   createService,
   editService,
@@ -260,5 +297,6 @@ module.exports = {
   detailsService,
   deleteService,
   searchService,
+  listService
 };
  

@@ -192,7 +192,7 @@ const pagination = async (query, createdBy) => {
 
 const listService = async (body,createdBy) =>{
   const category = await db.query(
-    `SELECT category.name FROM category JOIN company ON category.company_id = company.id WHERE company.name = '${createdBy.company}'`
+    `SELECT category.name FROM category JOIN company ON category.company_id = company.id WHERE company.name = '${createdBy.company}' AND category.is_delete = false`
   );
 
   const categoryList = [];

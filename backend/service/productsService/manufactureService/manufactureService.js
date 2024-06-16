@@ -92,7 +92,7 @@ const editService = async (body, createdBy, params) => {
   
 
   await db.query(
-    `UPDATE manufacture SET name = '${manufactureName}' , description = '${manufactureDescription}' , image = '${body.photo} 'WHERE id = '${id}'`
+    `UPDATE manufacture SET name = '${manufactureName}' , description = '${manufactureDescription}' , image = '${body.photo}' WHERE id = '${id}'`
   );
 
   return {
@@ -209,7 +209,7 @@ const pagination = async (query, createdBy) => {
 
 const listService = async (body,createdBy) =>{
     const manufacture = await db.query(
-      `SELECT manufacture.name FROM manufacture JOIN company ON manufacture.company_id = company.id WHERE company.name = '${createdBy.company}'`
+      `SELECT manufacture.name FROM manufacture JOIN company ON manufacture.company_id = company.id WHERE company.name = '${createdBy.company}' AND manufacture.is_delete = false`
     );
   
     const manufactureList = [];

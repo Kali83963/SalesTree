@@ -1,4 +1,4 @@
-const service = require("../../../service/productsService/subCategoryService/subCategoryService");
+const service = require("../../../service/productsService/productService/productService");
 
 const createContoller = async (req, res) => {
     try{
@@ -70,14 +70,15 @@ const paginatedListController = async (req,res)=>{
 }
 const ListController = async (req,res)=>{
     try{
-        const query = req.query;
+        const body = req.body;
         const createdBy = req.user;
-        const response = await service.listService(query, createdBy);
+        const response = await service.listService(body, createdBy);
         res.status(201).json(response);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 }
+
 module.exports = {
     createContoller,
     paginatedListController,

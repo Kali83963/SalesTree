@@ -4,12 +4,19 @@ import SelectInput from "../../global/SelectInput";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useEntityForm from "../../Hooks/useEntityForm";
 import FileInput from "../../components/FileInput/FileInput";
+import request from '../../requests/request';
 import Loading from "../../components/Loading/Loading";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 function AddProductsForm({ entity, isEditing }) {
   let { id } = useParams();
 
   const navigate = useNavigate();
+  const token = useSelector((state) => state.auth.current.user.jwt);
+  const [categories,setCategories] = useState([]);
+  const [subCategories , setSubCategories] = useState([]);
+  const [manufactures , setManufactures] = useState([]); 
 
   const { result, onSubmit, isLoading, isSuccess } = useEntityForm({
     entity,
@@ -17,9 +24,45 @@ function AddProductsForm({ entity, isEditing }) {
     isEditing,
   });
 
-  const { register, handleSubmit, reset, control } = useForm({
+  const { register, handleSubmit, reset, control , setValue } = useForm({
     values: result || null,
   });
+
+  async function listCategories(){
+    const response = await request.listAll({entity:'products/category',token})
+    setCategories(response.rows)
+  }
+  async function listManufactures(){
+    const response = await request.listAll({entity:'products/manufacture',token})
+    setManufactures(response.rows)
+  }
+
+  async function listSubCategories(category){
+    setValue('sub_category','');
+    const response = await request.listAll({entity:'products/subcategory',token: token , options: { category : category}});
+    setSubCategories(response?.rows || [])
+  }
+
+  useEffect(()=>{
+    async function listData(){
+      await listCategories()
+      await listManufactures()
+    }
+    listData()
+  },[])
+
+  useEffect(
+    function () {
+      if (isSuccess && isEditing) {
+        navigate(-1);
+      } else if (isSuccess) {
+        reset();
+      }
+    },
+    [isSuccess]
+  );
+
+
 
   
   return (
@@ -50,7 +93,7 @@ function AddProductsForm({ entity, isEditing }) {
                   placeholder="Product Name"
                   className="bg-[#F5F7F9] p-3 text-sm border border-[#E5E5E5] rounded-md w-full outline-none"
                   required={true}
-                  {...register("product_name", {
+                  {...register("name", {
                     required: "This field is required",
                   })}
                 />
@@ -66,11 +109,12 @@ function AddProductsForm({ entity, isEditing }) {
               <div className="relative w-full flex items-center basis-full">
                 <div className="flex-1">
                   <SelectInput
-                    data={["Electronics", "Fruit", "Appliances", "Utensils"]}
+                    data={categories}
                     control={control}
                     name="category"
                     {...register("category", {
                       required: "This field is required",
+                      onChange:(event) => listSubCategories(event.target.value)
                     })}
                   />
                 </div>
@@ -93,7 +137,8 @@ function AddProductsForm({ entity, isEditing }) {
               <div className="relative w-full flex items-center basis-full">
                 <div className="flex-1">
                   <SelectInput
-                    data={["Electronics", "Fruit", "Appliances", "Utensils"]}
+                    data={subCategories}
+
                     control={control}
                     name="subcategory"
                     {...register("sub_category", {
@@ -139,7 +184,7 @@ function AddProductsForm({ entity, isEditing }) {
               </label>
               <div className="relative w-full">
                 <SelectInput
-                  data={["Electronics", "Fruit", "Appliances", "Utensils"]}
+                  data={manufactures}
                   control={control}
                   name="manufacture"
                   {...register("manufacture", {

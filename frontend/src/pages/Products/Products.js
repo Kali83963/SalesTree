@@ -7,17 +7,32 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import Table from "../../components/table/Table";
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import Modal from "../../global/Modal";
+import { IMAGE_BASE_URL } from "../../utils/BASE_CONFIG";
 
 const columns= [
     { field: 'product_name', headerName: 'Product Name',flex:1,
-      renderCell:(params) => (
+      renderCell:(params) => {
+        const url = params.row.image !== 'undefined'  ? IMAGE_BASE_URL + params.row.image.replace('public/', '') : null;
+
+        return(
       <div className="flex items-center gap-2">
-        <div className="h-10 w-10 overflow-hidden rounded-full">
-            <img src={params.row.product_image} className="h-full w-full object-cover"/>
+        <div className="h-11 w-11 overflow-hidden rounded-full">
+          {params.row.image.trim() !== "undefined" ? (
+            <img
+              src={url}
+              alt={params.row.id}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex justify-center items-center text-white bg-gray-400">
+              {params.row.product_name.slice(0,2).toUpperCase()}
+            </div>
+          )}
         </div>
         <span>{params.row.product_name}</span>
       </div>
       )
+      }
 
     },
     { field: 'category_name', headerName: 'Category Name', flex:1 ,
@@ -25,9 +40,9 @@ const columns= [
        <span>{params.row.category_name}</span>
       )
     },
-    { field: 'subcategory_name', headerName: 'Sub Category Name', flex:1 ,
+    { field: 'sub_category_name', headerName: 'Sub Category Name', flex:1 ,
       renderCell:(params) => (
-       <span>{params.row.subcategory_name}</span>
+       <span>{params.row.sub_category_name}</span>
       )
     },
     
@@ -41,9 +56,9 @@ const columns= [
         <span>{params.row.manufacture_name}</span>
       )
     },
-    { field: 'price', headerName: 'Selling Price', flex:1,
+    { field: 'selling_price', headerName: 'Selling Price', flex:1,
       renderCell:(params) =>(
-        <span>{params.row.price}</span>
+        <span>{params.row.selling_price}</span>
       )
     },
     { field: 'unit', headerName: 'Unit', flex:1,
@@ -60,6 +75,7 @@ const columns= [
 
 
 function Products({entity}){
+  console.log(entity)
     return(
         <div className="px-4 py-6 text-sm">
             <div className="flex item-center justify-between flex-wrap gap-4">
