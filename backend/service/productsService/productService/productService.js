@@ -318,21 +318,85 @@ const pagination = async (query, createdBy) => {
   };
 };
 
-const listService = async (body,createdBy) =>{
-  const product = await db.query(
-    `SELECT category.name FROM category JOIN company ON category.company_id = company.id WHERE company.name = '${createdBy.company}'`
-  );
+const listService = async (query,createdBy) =>{
 
-  const categoryList = [];
+  const { query: queryParam } = query;
+  console.log(queryParam)
 
-  category.rows.map((val)=>{
-    categoryList.push(val.name);
+  let product;
+
+  if(query){
+     product = await db.query(
+      `SELECT product.id, product.name , product.description , product.selling_price , product.unit , product.barcode FROM product JOIN company ON product.company_id = company.id WHERE company.name = '${createdBy.company}' AND product.is_delete = false
+       AND (
+          product.name ILIKE '%${queryParam}%'
+          OR product.barcode ILIKE '%${queryParam}%'
+      );`
+    );
+    //  product = await db.query(
+    //   `SELECT product.id, product.name , product.description , product.selling_price , product.unit , product.barcode FROM product JOIN company ON product.company_id = company.id
+    //   LEFT JOIN (
+    //   SELECT product_id, SUM(quantity) AS total_sales_quantity
+    //   FROM sales
+    //   GROUP BY product_id
+    //   ) AS sales_aggregate ON product.id = sales_aggregate.product_id   
+    //   WHERE company.name = '${createdBy.company}' 
+    //   AND product.is_delete = false
+    //   AND CAST(product.unit AS INTEGER) > COALESCE(sales_aggregate.total_sales_quantity, 0)
+    //    AND (
+    //       product.name ILIKE '%${queryParam}%'
+    //       OR product.barcode ILIKE '%${queryParam}%'
+    //   );`
+    // );
+  }else{
+
+     product = await db.query(
+      `SELECT product.id, product.name , product.description , product.selling_price , product.unit , product.barcode FROM product JOIN company ON product.company_id = company.id WHERE company.name = '${createdBy.company}' AND product.is_delete = false;`
+    );
+  }
+
+  const productList = [];
+
+  product.rows.map((val)=>{
+    productList.push(val);
   })
 
   return {
-    rows:categoryList
+    rows:productList
   };
 }
+
+const quantityCheckService = async (body,params , createdBy)=>{
+  const { id } = params;
+  const { quantity } = body;
+
+  const quantityCheck = await db.query(
+    `SELECT * from product JOIN company ON product.company_id = company.id WHERE company.name = '${createdBy.company}'  AND product.is_delete = false AND  CAST(product.unit AS INTEGER) >= ${quantity} AND product.id = ${id};`
+  )
+
+  if (quantityCheck.rows.length === 0) {
+    throw new Error('Insufficient quantity or product not found.');
+  }
+
+  return quantityCheck.rows;
+
+}
+// const listSearchService = async (query,createdBy) =>{
+
+//   const { query: queryParam } = query;
+
+  
+
+//   const productList = [];
+
+//   product.rows.map((val)=>{
+//     productList.push(val);
+//   })
+
+//   return {
+//     rows:productList
+//   };
+// }
 
 module.exports = {
   createService,
@@ -341,5 +405,7 @@ module.exports = {
   detailsService,
   deleteService,
   searchService,
-  listService
+  listService,
+  quantityCheckService
+  // listSearchService
 };

@@ -133,7 +133,7 @@ export const login = async (email, password) => {
 
 export const register = async (registerData) => {
     try {
-      const url = `${BASE_URL}/api/auth/register`;
+      const url = `${BASE_URL}auth/register`;
       const response = await axios.post(url, registerData);
      
 

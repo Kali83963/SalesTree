@@ -70,14 +70,35 @@ const paginatedListController = async (req,res)=>{
 }
 const ListController = async (req,res)=>{
     try{
-        const body = req.body;
         const createdBy = req.user;
-        const response = await service.listService(body, createdBy);
+        const query = req.query;
+        const response = await service.listService(query,createdBy);
         res.status(201).json(response);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 }
+const QuantityCheckController = async (req,res)=>{
+    try{
+        const createdBy = req.user;
+        const params = req.params;
+        const body = req.body;
+        const response = await service.quantityCheckService(body,params,createdBy);
+        res.status(201).json(response);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+// const ListSearchController = async (req,res)=>{
+//     try{
+//         const createdBy = req.user;
+//         const query = req.query;
+//         const response = await service.listSearchService(query, createdBy);
+//         res.status(201).json(response);
+//     } catch (error) {
+//         res.status(400).json({ message: error.message });
+//     }
+// }
 
 module.exports = {
     createContoller,
@@ -86,5 +107,7 @@ module.exports = {
     editController,
     deleteController,
     searchController,
-    ListController
+    ListController,
+    QuantityCheckController
+    // ListSearchController
 }

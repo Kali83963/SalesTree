@@ -1,150 +1,33 @@
 import "./PosScreen.css";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Table from "../../components/table/Table";
 import Modal from "../../global/Modal";
 import DeleteOutlineOutlined from "@mui/icons-material/DeleteOutlineOutlined";
 import ConfirmDelete from "../../global/ConfirmDelete";
 import SearchIcon from "@mui/icons-material/Search";
-import dollarCurrency from "../../Assests/images/dollor-currency.svg";
-import CreditCardIcon from "../../Assests/images/credit-card.svg";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import request from '../../requests/request';
 import PosTable from "./PosTable";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import LocalAtmIcon from '@mui/icons-material/LocalAtm';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import { List, ListItem, ListItemText, Radio, RadioGroup } from "@mui/material";
+import useEntityForm from "../../Hooks/useEntityForm";
 
-const data = [
-  {
-    id: 1,
-    item_name: "Item 1",
-    barcode: "0123456789011",
-    description: "Description for Item 1",
-    price: 25.99,
-    quantity: 2
-  },
-  {
-    id: 2,
-    item_name: "Item 2",
-    barcode: "1234567890122",
-    description: "Description for Item 2",
-    price: 19.99,
-    quantity: 2
-  },
-  {
-    id: 3,
-    item_name: "Item 3",
-    barcode: "2345678901233",
-    description: "Description for Item 3",
-    price: 32.49,
-    quantity: 2
-  },
-  {
-    id: 4,
-    item_name: "Item 4",
-    barcode: "3456789012344",
-    description: "Description for Item 4",
-    price: 12.99,
-    quantity: 2
-  },
-  {
-    id: 5,
-    item_name: "Item 5",
-    barcode: "4567890123455",
-    description: "Description for Item 5",
-    price: 44.99,
-    quantity: 2
-  },
-  {
-    id: 6,
-    item_name: "Item 6",
-    barcode: "5678901234566",
-    description: "Description for Item 6",
-    price: 8.75,
-    quantity: 2
-  },
-  {
-    id: 7,
-    item_name: "Item 7",
-    barcode: "6789012345677",
-    description: "Description for Item 7",
-    price: 17.5,
-    quantity: 2
-  },
-  {
-    id: 8,
-    item_name: "Item 8",
-    barcode: "7890123456788",
-    description: "Description for Item 8",
-    price: 39.99,
-    quantity: 2
-  },
-  {
-    id: 9,
-    item_name: "Item 9",
-    barcode: "8901234567899",
-    description: "Description for Item 9",
-    price: 21.99,
-    quantity: 2
-  },
-  {
-    id: 10,
-    item_name: "Item 10",
-    barcode: "9012345678900",
-    description: "Description for Item 10",
-    price: 13.25,
-    quantity: 2
-  },
-  {
-    id: 11,
-    item_name: "Item 11",
-    barcode: "0123456789012",
-    description: "Description for Item 11",
-    price: 29.99,
-    quantity: 2
-  },
-  {
-    id: 12,
-    item_name: "Item 12",
-    barcode: "1234567890123",
-    description: "Description for Item 12",
-    price: 36.5,
-    quantity: 2
-  },
-  {
-    id: 13,
-    item_name: "Item 13",
-    barcode: "2345678901234",
-    description: "Description for Item 13",
-    price: 9.99,
-    quantity: 2
-  },
-  {
-    id: 14,
-    item_name: "Item 14",
-    barcode: "3456789012345",
-    description: "Description for Item 14",
-    price: 18.49,
-    quantity: 2
-  },
-  {
-    id: 15,
-    item_name: "Item 15",
-    barcode: "4567890123456",
-    description: "Description for Item 15",
-    price: 42.99,
-    quantity: 2
-  }
-];
+
 
 
 
 const columns = [
   
   {
-    field: "item_name",
+    field: "name",
     headerName: "Item Name",
     flex: 1,
     sortable: false,
     width:'200px',
-    renderCell: (params) => (<span>{params.row.item_name}</span>),
+    renderCell: (params) => (<span>{params.row.name}</span>),
   },
   {
     field: "barcode",
@@ -167,18 +50,18 @@ const columns = [
     sortable: false,
     renderCell: (params,handleDecrement,handleIncrement,index) => (
       <div className="flex items-center justify-center gap-2">
-        <button className={`rounded-full ${params.row.quantity === 1 ? 'text-slate-700 bg-slate-400' : "text-primary border-2 border-primary"}  w-6 h-6 text-center font-bold`} onClick={()=>handleDecrement(params.row,params.row.id-1)} disabled={params.row.quantity === 1}>-</button>
+        <button className={`rounded-full ${params.row.quantity === 1  ? 'text-slate-700 bg-slate-400' : "text-primary border-2 border-primary"}  w-6 h-6 text-center font-bold`} onClick={()=>handleDecrement(params.row,params.row.id-1)} disabled={params.row.quantity === 1}>-</button>
         <span>{params.row.quantity}</span>
         <button className="rounded-full text-white bg-primary w-6 h-6 text-center font-bold" onClick={()=>handleIncrement(params.row,params.row.id-1)}>+</button>
       </div>
     ),
   },
   {
-    field: "price",
+    field: "selling_price",
     headerName: "Price",
     flex: 1,
     sortable: false,
-    renderCell: (params) => <span>${params.row.price}</span>,
+    renderCell: (params) => <span>${params.row.selling_price}</span>,
   },
   {
     field: "action",
@@ -193,7 +76,7 @@ const columns = [
             </button>
           </Modal.Open>
           <Modal.Window name="delete-form">
-            <ConfirmDelete handleDelete ={handleDeleteCartitem} value = {params.row}/>
+            <ConfirmDelete handleDelete ={handleDeleteCartitem} id = {params.row.id}/>
           </Modal.Window>
         </Modal>
       </div>
@@ -212,61 +95,118 @@ export const validatePhoneNumber = (value) => {
 function PosScreen() {
   
   const searchInput = useRef(null);
-  const [cart, setCart] = useState(data);
+  const [cart, setCart] = useState([]);
   const [searchQueries,setSearchQueries] = useState([]);
-  const [discount,setDiscount] = useState(null);
-  
-  console.log(discount);
-  
+  const [totalCost,setTotalCost] = useState(0)
+  const [discount,setDiscount] = useState(0);
+  const [cashRefund,setCashRefund] = useState(0);
+  const [subTotal,setSubTotal] = useState(0);
+  const token = useSelector((state) => state.auth.current.user.jwt);
 
 
-  function handleDecrement(val,index){
-    const updatedList = [...cart];
+  const { register, handleSubmit, reset, control , setValue , getValues  } = useForm({
+    values: null,
+  });
+
+  // const { result, onSubmit, isLoading, isSuccess } = useEntityForm({
+  //   entity,
+  //   id,
+  //   false,
+  // });
+
+  async function onSubmit(event){
+    try{
+      const { cash_received } = event;
+      if( totalCost < parseFloat(cash_received) ){
+        toast.error('Total Cost is less then cash recevied.')
+      }
+      // const response = await request.create()
+    }catch(error){
+      console.error(error)
+    }
+  }
+  
+  
+  async function searchProducts(queryParam){
+    const options = { query:queryParam }
+    const response = await request.search({entity:'products/product/list-all',token:token,options});
+    return response?.rows
+  }
+
+  async function checkProductQuantity(id,quantityToCheck){
+    const jsonData = { quantity : quantityToCheck}
+    const reponse = await request.patch({entity:`products/product/check-product-quantity/${id}`,jsonData,token:token})
+
+    return reponse;
+  }
+
+  async function calculateTotalCost(){
+    let newTotalCost = 0;
+    cart.map((item)=>{
+      newTotalCost += item.quantity *parseInt(item.selling_price)
+    })
+
+    setTotalCost(newTotalCost);
+  }
+  async function calculateSubTotal(){
+    const newSubTotal = totalCost - discount
+    setSubTotal(newSubTotal);
+  }
+
+  async function handleDecrement(val,index){
 
     // Find the object in the list
     const updatedObject = {...val};
 
-    updatedObject.quantity = updatedObject.quantity -1;    
-    updatedList[index] = updatedObject;
-    // Set the updated state
-    setCart(updatedList);
+    const checkQuantity = await checkProductQuantity(updatedObject.id , updatedObject.quantity-1);
+    if(checkQuantity){
+      updatedObject.quantity = updatedObject.quantity -1;    
+      const updatedList = cart.map(item => 
+        item.id === updatedObject.id ? updatedObject : item
+      );;
+      // Set the updated state
+      setCart(updatedList);
+    }
+
   }
 
-  function handleIncrement(val,index){
-    const updatedList = [...cart];
+  async function handleIncrement(val,index){
+    console.log(val)
+    console.log(index)
+    // const updatedList = [...cart];
 
     // Find the object in the list
     const updatedObject = {...val};
 
-    updatedObject.quantity = updatedObject.quantity +1;    
-    updatedList[index] = updatedObject;
-    // Set the updated state
-    setCart(updatedList);
+    const checkQuantity = await checkProductQuantity(updatedObject.id , updatedObject.quantity+1);
+    if(checkQuantity){
+      updatedObject.quantity = updatedObject.quantity +1;    
+      const updatedList = cart.map(item => 
+        item.id === updatedObject.id ? updatedObject : item
+      );;
+      // Set the updated state
+      setCart(updatedList);
+    }
   }
 
-  function handleSearch(event){
+  async function handleSearch(event){
     event.target.focus();
     const searchTerm = event.target.value.toLowerCase();
     let searchResults;
     if(searchTerm !== ""){
-      searchResults = data.filter(item => {
-        const itemNameLower = item.item_name.toLowerCase();
-        const barcodeLower = item.barcode.toLowerCase();
-        return itemNameLower.includes(searchTerm) || barcodeLower.includes(searchTerm);
-      });
+       searchResults = await searchProducts(searchTerm)      
     }else{
       searchResults = []
     }
-    
-
-
+  
     setSearchQueries(searchResults);
     
   }
 
+
   function handleAddCart(value,index){
     const valueExist = cart.find(item =>{
-        return item.item_name === value.item_name;
+        return item.id === value.id;
     });
 
     if(valueExist){
@@ -282,14 +222,27 @@ function PosScreen() {
     searchInput.current.value ="";
   }
 
-  function handleDeleteCartitem(value){
+  function handleDeleteCartitem(id){
+    console.log(id)
     const newCart = cart.filter(item=>(
-      item.item_name !== value.item_name && item.barcode !== value.barcode
+      item.id !== id
     ));
     
     setCart(newCart)
 
   }
+
+  useEffect(function(){
+    calculateTotalCost();
+  },[cart])
+
+  useEffect(function(){
+    calculateSubTotal();
+  },[totalCost,discount])
+
+  useEffect(function(){
+    setCashRefund(getValues('cash_received') - totalCost )
+  },[totalCost])
 
 
   return (
@@ -300,13 +253,13 @@ function PosScreen() {
           <span className="text-sm">Manage Your Sales</span>
         </div>
       </div>
-      <div className="bg-white rounded-md mt-6 p-5 shadow-md flex h-100 custom">
+      <div className="bg-white rounded-md mt-6 p-5 shadow-md flex custom">
         <div className="w-full lg:w-4/6">
-          <div className="py-2  px-4 flex flex-row flex-wrap items-center gap-6">
-            <button className="bg-primary whitespace-nowrap flex order-last md:order-1 items-center text-sm text-white rounded-md  px-4 py-2 shadow-md font-bold">
+          <div className="py-2 px-6 flex flex-row flex-wrap items-center gap-6">
+            {/* <button className="bg-primary whitespace-nowrap flex order-last md:order-1 items-center text-sm text-white rounded-md  px-4 py-2 shadow-md font-bold">
               Scan Barcode
-            </button>
-            <div className="flex w-72 flex-col relative md:order-2">
+            </button> */}
+            <div className="flex   flex-1  flex-col relative md:order-2">
               <label className="flex items-center justify-center  relative ">
                 <input
                   type="search"
@@ -324,8 +277,8 @@ function PosScreen() {
                   {searchQueries.map((item, index) => (
                     <li key={index} className="list-none p-2 text-sm cursor-pointer" onClick={()=>handleAddCart(item,index)}>
                       <div className="flex items-center justify-between">
-                        <h1 className="text-left">{item.item_name}</h1>
-                        <span>${item.price}</span>
+                        <h1 className="text-left">{item.name}</h1>
+                        <span>${item.selling_price}</span>
                       </div>
                       <h6 className="text-left text-xs text-gray-500">{item.description}</h6>
                     </li>
@@ -349,33 +302,227 @@ function PosScreen() {
                 <button className="bg-white text-primary border text-sm rounded-md border-primary px-7 py-3 shadow-md">
                   Save
                 </button>
-                <Modal>
-                  <Modal.Open opens="discount-form">
-                  <button className="bg-primary flex items-center text-sm text-white rounded-md px-7 py-3 shadow-md">
-                    Discount
-                  </button>
-                  </Modal.Open>
-                  <Modal.Window name="discount-form"  >
-                    <div className="flex items-center justify-center flex-col w-full">
-                      <h1 className="text-primary">Discount</h1>
-                      <input
-                        type="number"
-                        placeholder="Enter Discount" 
-                        className="bg-[#F5F7F9] p-3 text-sm border border-[#E5E5E5] rounded-md w-full outline-none"
-                        value={discount}
-                        onChange={(e)=>setDiscount(e.target.value)}
-                        
-                      />
-                      
-                    </div>
-                  </Modal.Window>
-                </Modal>
-                
                 <button className="bg-white text-primary border text-sm rounded-md border-primary px-7 py-3 shadow-md">
                   Clear All
                 </button>
              </div>
           </div>
+        </div>
+        <div className="ml-5 lg:w-2/6">
+          <form
+            className="w-full flex flex-col gap-4"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+              <div className="text-lg text-primary font-bold">
+                <span>Order List</span>
+              </div>
+              <div className="flex flex-col items-start justify-start gap-1 mt-5">
+                <label
+                  htmlFor="customer_name"
+                  className='text-sm after:content-["*"] after:text-red-600'
+                >
+                 Customer Name
+                </label>
+                <div className="relative w-full">
+                  <input
+                    id="product"
+                    type="text"
+                    placeholder="Enter Customer Name"
+                    className="bg-[#F5F7F9] p-3 text-sm border border-[#E5E5E5] rounded-md w-full outline-none"
+                    required={true}
+                    {...register("customer_name", {
+                      required: "This field is required",
+                    })}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col items-start justify-start gap-1 mt-5">
+                <label
+                  htmlFor="customer_name"
+                  className='text-sm after:content-["*"] after:text-red-600'
+                >
+                 Phone Number
+                </label>
+                <div className="relative w-full">
+                  <input
+                    id="product"
+                    type="text"
+                    placeholder="Enter Phone Number"
+                    className="bg-[#F5F7F9] p-3 text-sm border border-[#E5E5E5] rounded-md w-full outline-none"
+                    required={true}
+                    maxLength={11}
+                    {...register("phone_number", {
+                      required: "This field is required",
+                      validate: validatePhoneNumber,
+                      maxLength:11
+                    })}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col items-start justify-start gap-1 mt-5">
+                <span>
+                  Billing details
+                </span>
+                <ul className="w-full px-4 mt-6">
+                  <li className="flex justify-between items-center py-2">
+                     <span>Total Cost</span>
+                     <span>${totalCost}</span>
+                  </li>
+                  <li className="flex justify-between items-center py-2">
+                     <span>Discount</span>
+                     <span>${discount}</span>
+                  </li>
+                </ul>
+                
+                <div className="w-full flex justify-between items-center font-bold border-t border-b py-2 text-lg" >
+                  <span>Sub Total</span>
+                  <span>${subTotal}</span>
+                </div>
+              </div>
+              <div className="flex flex-col items-start justify-start gap-1 mt-5">
+                <label
+                  htmlFor="cash_recieved"
+                  className='text-sm after:content-["*"] after:text-red-600'
+                >
+                 Cash Received
+                </label>
+                <div className="relative w-full">
+                  <input
+                    id="product"
+                    type="text"
+                    placeholder="Enter Cash Received"
+                    className="bg-[#F5F7F9] p-3 text-sm border border-[#E5E5E5] rounded-md w-full outline-none"
+                    required={true}
+                    maxLength={11}
+                    {...register("cash_received", {
+                      required: "This field is required",
+                      onChange:(event)=>{
+                        if(event.target.value){
+                          const cashReceived = parseInt(event.target.value);
+                          setCashRefund(cashReceived-subTotal);
+                        }
+                      }
+                    })}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col items-start justify-start gap-1 mt-5">
+                <label
+                  htmlFor="discount"
+                  className='text-sm after:content-["*"] after:text-red-600'
+                >
+                 Discount
+                </label>
+                <div className="relative w-full">
+                  <input
+                    id="product"
+                    type="text"
+                    placeholder="Enter Discount"
+                    className="bg-[#F5F7F9] p-3 text-sm border border-[#E5E5E5] rounded-md w-full outline-none"
+                    required={true}
+                    maxLength={11}
+                    {...register("discount", {
+                      required: "This field is required",
+                      onChange:(event)=>{
+                        if(event.target.value){
+                        const discount = parseInt(event.target.value)
+                        setDiscount(discount)
+                        }
+                      }
+                    })}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col items-start justify-start gap-1 mt-5">
+                  <div className="w-full flex justify-between items-center px-4">
+                    <span>Cash Refund</span>
+                    <span>${cashRefund}</span>
+                  </div>
+              </div>
+              <div className="flex flex-col items-start justify-start gap-1 mt-5">
+                <label
+                  htmlFor="discount"
+                  className='after:content-["*"] after:text-red-600 text-primary font-bold text-lg'
+                >
+                 Payment Method
+                </label>
+                <div className="relative w-full">
+                  
+                    <label className="text-primary cursor-pointer w-max h-max ">
+                <Controller
+                  name="payment_method"
+                  control={control}
+                  defaultValue=""  // Set default value if needed
+                  render={({ field }) => (
+                      <Radio 
+                      {...field}
+                      required
+                        icon={<LocalAtmIcon className="text-primary" sx={{
+                        height:'4 w-max h-maxrem',
+                        width: '4rem',
+                        fontSize: '3rem',
+                        border: '1px solid #E5E5E5',
+                        borderRadius: '0.5rem'
+                        }} />}  
+                        checkedIcon={
+                        <LocalAtmIcon className="text-primary" sx={{
+                          height:'4 w-max h-maxrem',
+                          width: '4rem',
+                          fontSize: '3rem',
+                        
+                          borderRadius: '0.5rem'
+                        }} />
+                        }
+                        name="payment_method"
+                        value="CASH"
+                        
+                      />
+                    )}/>
+                    </label>
+                    <label className="text-primary cursor-pointer w-max h-max ">
+                    <Controller
+                  name="payment_method"
+                  control={control}
+                 
+                  defaultValue=""  // Set default value if needed
+                  render={({ field }) => (
+                      <Radio 
+                      required
+                      {...field}
+                        icon={<CreditCardIcon className="text-primary" sx={{
+                        height:'4 w-max h-maxrem',
+                        width: '4rem',
+                        fontSize: '3rem',
+                        border: '1px solid #E5E5E5',
+                        borderRadius: '0.5rem'
+                        }} />}  
+                        checkedIcon={
+                        <CreditCardIcon className="text-primary" sx={{
+                          height:'4 w-max h-maxrem',
+                          width: '4rem',
+                          fontSize: '3rem',
+                         
+                          borderRadius: '0.5rem'
+                        }} />
+                        }
+                        name="payment_method"
+                        value={"DEBIT"}
+                      />
+                  )} />
+                    </label>
+                   
+
+                </div>
+              </div>
+              <div className="w-full flex items-center justify-center mt-5">
+                  <button type="submit" className="bg-primary w-96 text-center text-sm text-white rounded-md px-8 py-3 shadow-md">
+                    Checkout
+                  </button>
+              </div>
+              
+
+          </form>
+
         </div>
       </div>
     </div>

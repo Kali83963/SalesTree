@@ -37,4 +37,8 @@
   display: none;
 }
 
+.MuiButtonBase-root.MuiRadio-root.MuiRadio-colorPrimary input:checked + .MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium{
+  border: 1px solid #5A6DFC;
+}
+
 /* Override styles for the body element */

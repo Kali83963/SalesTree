@@ -3,6 +3,7 @@ const service = require('../../service/authService/authService');
 
 const registerUserContoller = async (req, res, db) => {
     try {
+        console.log(1)
         const body = req.body;
         const user = await service.registerUser(body, db);
         res.status(201).json({ user });

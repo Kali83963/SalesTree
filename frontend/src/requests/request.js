@@ -212,9 +212,13 @@ const request = {
       return errorHandler(error);
     }
   },
-  patch: async ({ entity, jsonData,headers }) => {
+  patch: async ({ entity, jsonData,token,headers }) => {
     try {
-      const response = await axios.patch(entity, jsonData,{ headers:headers });
+      const response = await axios.patch(entity, jsonData,{
+        headers: {
+          'Authorization':`Bearer ${token}`,
+          ...headers
+        }});
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,
