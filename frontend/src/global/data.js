@@ -128,44 +128,64 @@ export const topDealUsers = [
     ],
   };
 
-  export const barChartBoxRevenue = {
-    title: "Profit Earned",
-    color: "#8884d8",
-    dataKey: "profit",
+  export const barChartBoxVisit = {
+    title: "Monthly Sales",
+    color: "#5A6DFC",
+    dataKey: "sales",
     chartData: [
       {
-        name: "Sun",
-        profit: 4000,
+        name: "Jan",
+        sales: 4000,
       },
       {
-        name: "Mon",
-        profit: 3000,
+        name: "Feb",
+        sales: 3000,
       },
       {
-        name: "Tue",
-        profit: 2000,
+        name: "Mar",
+        sales: 2000,
       },
       {
-        name: "Wed",
-        profit: 2780,
+        name: "Apr",
+        sales: 2780,
       },
       {
-        name: "Thu",
-        profit: 1890,
+        name: "May",
+        sales: 1890,
       },
       {
-        name: "Fri",
-        profit: 2390,
+        name: "June",
+        sales: 2390,
       },
       {
-        name: "Sat",
-        profit: 3490,
+        name: "July",
+        sales: 3490,
+      },
+      {
+        name: "Aug",
+        sales: 1490,
+      },
+      {
+        name: "Sept",
+        sales: 1650,
+      },
+      {
+        name: "Oct",
+        sales: 2750,
+      },
+      {
+        name: "Nov",
+        sales: 3950,
+      },
+      {
+        name: "Dec",
+        sales: 5050,
       },
     ],
   };
 
 
-  export const barChartBoxVisit = {
+  export const barChartBoxRevenue = {
     title: "Total Visit",
     color: "#FF8042",
     dataKey: "visit",

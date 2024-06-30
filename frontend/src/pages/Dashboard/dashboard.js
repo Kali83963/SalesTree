@@ -1,8 +1,10 @@
 
+import LineChartBox from '../../components/LineChartBox/LineChartBox';
 import BarChartBox from '../../components/barChatBox/BarChartBox';
 import AreaChartBox from '../../components/bigChartBox/AreaChartBox';
 import ChartBox from '../../components/chartbox/ChartBox';
 import PieChartBox from '../../components/pieChartBox/PieChartBox';
+import RadicalChartBox from '../../components/radicalChartBox/radicalChartBox';
 import TopBox from '../../components/tobox/TopBox';
 import { topDealUsers , chartBoxUser , chartBoxProduct , chartBoxRevenue , chartBoxConversion , barChartBoxRevenue , barChartBoxVisit} from '../../global/data';
 
@@ -10,24 +12,25 @@ import './dashboard.css';
 const DashBoard = ()=> {
 
     return(
-        <div className="dashboard">
-            
-            <div className="box box1">
-                <TopBox topDealUsers = {topDealUsers} />
+        <div className="flex flex-col h-screen overflow-hidden">
+            <div className='flex-1 grid grid-cols-3 auto-rows-fr'>
+
+                <div className="p-5  col-span-1	row-span-2	flex items-center justify-center"><LineChartBox /></div>
+                <div className="p-5 col-span-1	row-span-2 flex items-center justify-center"><RadicalChartBox text={'Monthly Goal'} value={60}/></div>
+                <div className="p-5 col-span-1	row-span-2 flex items-center justify-center"><RadicalChartBox text={'Yearly Goal'} value={40}/></div>
+
             </div>
-            <div className="box box2"><ChartBox props = {chartBoxUser}/></div>
-            <div className="box box3"><ChartBox props = {chartBoxProduct}/></div>
-            <div className="box box4"><PieChartBox /></div>
-            <div className="box box5"><ChartBox props={chartBoxRevenue}/></div>
-            <div className="box box6"><ChartBox props={chartBoxConversion} /></div>
-            <div className="box box7">
-                <AreaChartBox />
+
+          
+             
+    
+
+            <div className='flex-1 p-2'>
+
+                <BarChartBox {...barChartBoxVisit}/>
             </div>
-            <div className="box box8"><BarChartBox {...barChartBoxRevenue}/></div>
-            <div className="box box9">
-            
-            <BarChartBox {...barChartBoxVisit}/>
-            </div>
+
+
             
         </div>
     )

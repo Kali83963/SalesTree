@@ -84,7 +84,7 @@ const loginUser = async (body, res) => {
     }
 
     // Use parameterized query to prevent SQL injection
-    const user = await db.query(`SELECT users.id, users.name, users.email, users.currency, users.timezone, company.name AS company_name, users.password
+    const user = await db.query(`SELECT users.id, users.name, users.email, users.currency, users.timezone, company.name AS company_name, users.password , users.profile_image
                                  FROM users
                                  JOIN company ON users.company_id = company.id
                                  WHERE users.email = $1 AND users.is_delete = false`, [email]);
@@ -112,6 +112,7 @@ const loginUser = async (body, res) => {
             email: user.rows[0].email,
             company:user.rows[0].company_name,
             role: !employee.rowCount ? "owner" : employee.rows[0].role,
+            profile_image: user.rows[0].profile_image
         }
     }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
 
@@ -124,7 +125,8 @@ const loginUser = async (body, res) => {
             company: user.rows[0].company_name,
             role: !employee.rowCount ? "owner" : employee.rows[0].role,
             timezone: user.rows[0].timezone,
-            currency: user.rows[0].currency
+            currency: user.rows[0].currency,
+            profile_image: user.rows[0].profile_image
         }
     };
 

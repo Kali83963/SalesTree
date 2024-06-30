@@ -48,10 +48,10 @@ const columns= [
       ),
     },
     {
-      field: 'Status',
+      field: 'status',
       headerName: 'Status',
       renderCell: (params) => (
-        <span className={`${ params.row.Status ? "text-green-400": 'text-gray-500'} before:content-['•'] before:mr-1 before:text-lg before:scale-[4]`}>{params.row.Status ? "Active" : "Inactive"}</span>
+        <span className={`${ params.row.status === 'active' ? "text-green-400": 'text-gray-500'} before:content-['•'] before:mr-1 before:text-lg before:scale-[4]`}>{params.row.status === 'active' ? "Active" : "Inactive"}</span>
       ),
     },
   ];

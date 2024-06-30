@@ -325,15 +325,6 @@ function PosScreen() {
                 handleDeleteCartitem = {handleDeleteCartitem}
               />
              </div>
-             <hr className="bg-[#e5e7eb] h-0.5"/>
-             <div className="flex items-center gap-4  py-4">
-                <button className="bg-white text-primary border text-sm rounded-md border-primary px-7 py-3 shadow-md">
-                  Save
-                </button>
-                <button className="bg-white text-primary border text-sm rounded-md border-primary px-7 py-3 shadow-md">
-                  Clear All
-                </button>
-             </div>
           </div>
         </div>
         <div className="ml-5 lg:w-2/6">
