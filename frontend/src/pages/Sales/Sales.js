@@ -8,50 +8,24 @@ const columns= [
        <span>{params.row.customer_name}</span>
       )
     },
-    { field: 'date', headerName: 'Date', flex:1,
+    { field: 'created_at', headerName: 'Date', flex:1,
       renderCell:(params) =>(
-        <span>{params.row.date}</span>
+        <span>{new Date(params.row.created_at).toLocaleString()}</span>
       )
     },
-    { field: 'receipt_no', headerName: 'Receipt No', flex:1,
+    { field: 'total_cost', headerName: 'Total', flex:1,
       renderCell:(params) =>(
-        <span>{params.row.receipt_no}</span>
+        <span>{params.row.total_cost}</span>
       )
     },
-    { field: 'status', headerName: 'Status', flex:1,
+    { field: 'payment_method', headerName: 'Payment Method', flex:1,
       renderCell:(params) =>(
-        
-        <span className={`px-4 py-2 ${params.row.status === "Due" ? 'bg-red-700':'bg-green-700'}`}>{params.row.status}</span>
+        <span>{params.row.payment_method}</span>
       )
     },
-    { field: 'payment_status', headerName: 'Payment Status', flex:1,
+    { field: 'biller', headerName: 'Biller', flex:1,
       renderCell:(params) =>(
-        <span>{params.row.payment_status}</span>
-      )
-    },
-    { field: 'total', headerName: 'Total', flex:1,
-      renderCell:(params) =>(
-        <span>{params.row.total}</span>
-      )
-    },
-    { field: 'paid', headerName: 'Paid', flex:1,
-      renderCell:(params) =>(
-        <span>{params.row.paid}</span>
-      )
-    },
-    { field: 'due', headerName: 'Due', flex:1,
-      renderCell:(params) =>(
-        <span>{params.row.due}</span>
-      )
-    },
-    { field: 'location', headerName: 'Location', flex:1,
-      renderCell:(params) =>(
-        <span>{params.row.location}</span>
-      )
-    },
-    { field: 'biller_name', headerName: 'Biller', flex:1,
-      renderCell:(params) =>(
-        <span>{params.row.biller_name}</span>
+        <span>{params.row.biller}</span>
       )
     }
 
@@ -70,7 +44,7 @@ function Sales(){
             </div>
             <div className="bg-white rounded-md mt-6 p-5 shadow-md">
             
-                <Table columns={columns} data={[]} />
+                <Table columns={columns}  entity={'sales'} action={false}/>
             </div>
         </div>
     )

@@ -141,7 +141,7 @@ const editService = async (body, createdBy, params) => {
   );
 
   return {
-    message: "Category successfully updated.",
+    message: "Product successfully updated.",
     success: true,
   };
 };

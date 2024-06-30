@@ -139,7 +139,7 @@ function CustomToolBar() {
   );
 }
 
-function Table({entity, columns,editPath,showToolbar=true,showCheckboxSelection = false,showPagination=false }) {
+function Table({entity, columns,editPath,showToolbar=true,showCheckboxSelection = false,showPagination=false , action=true}) {
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0, 
@@ -194,10 +194,13 @@ function Table({entity, columns,editPath,showToolbar=true,showCheckboxSelection 
     setPaginationModel((state)=>({...state,page:0}));
   }, []);
   
-
   const updatedColumn = [
     ...columns,
-    {
+   
+  ]
+
+  if(action){
+    updatedColumn.push({
       field: 'action',
       headerName: 'Action',
       sortable:false,
@@ -218,8 +221,10 @@ function Table({entity, columns,editPath,showToolbar=true,showCheckboxSelection 
             </Modal>
         </div>
         ),
-    }, 
-  ]
+    })
+  }
+
+  
   
 
   

@@ -102,7 +102,44 @@ CREATE TABLE product (
     FOREIGN KEY (category_id) REFERENCES category (ID) ON DELETE CASCADE,
     FOREIGN KEY (manufacture_id) REFERENCES manufacture (ID) ON DELETE CASCADE,
     FOREIGN KEY (sub_category_id) REFERENCES sub_category (ID) ON DELETE CASCADE,
-    reated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_delete BOOLEAN DEFAULT FALSE,
 );
+
+
+CREATE TABLE sales (
+    id SERIAL PRIMARY KEY,
+    customer_name VARCHAR(255) NOT NULL,
+    created_user INT NOT NULL,
+    total_cost INT NOT NULL,
+    company_id INTEGER NOT NULL,
+    FOREIGN KEY (company_id) REFERENCES company (ID) ON DELETE CASCADE,
+    FOREIGN KEY (created_user) REFERENCES users (ID) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_delete BOOLEAN DEFAULT FALSE,
+    customer_phoneno VARCHAR(255) NOT NULL,
+    cash_received INT NOT NULL,
+    discount INT NOT NULL,
+    cash_refund INT NOT NULL,
+    payment_method VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE sales_item (
+    id SERIAL PRIMARY KEY,
+    sales_id INT NOT NULL,
+    product_id INT NOT NULL,
+    created_user INT NOT NULL,
+    company_id INTEGER NOT NULL,
+    FOREIGN KEY (company_id) REFERENCES company (ID) ON DELETE CASCADE,
+    cost INT NOT NULL,
+    quantity INT NOT NULL,
+    FOREIGN KEY (created_user) REFERENCES users (ID) ON DELETE CASCADE,
+    FOREIGN KEY (sales_id) REFERENCES sales (ID) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES product (ID) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_delete BOOLEAN DEFAULT FALSE
+);
+GRANT USAGE, SELECT ON SEQUENCE sales_id_seq TO salestree;

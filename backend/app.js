@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes/userRoutes');
+const salesRoutes = require('./routes/salesRoutes/salesRoutes');
 const productsRoutes = require('./routes/productsRoutes/productsRoutes');
 // create our Express app
 const app = express();
@@ -33,6 +34,7 @@ app.use(compression());
 app.use('/api/auth',authRoutes);
 app.use('/api/user',userRoutes);
 app.use('/api/products',productsRoutes);
+app.use('/api/sales',salesRoutes);
 // app.use('/api', adminAuth.isValidAuthToken, coreApiRouter);
 // app.use('/api', adminAuth.isValidAuthToken, erpApiRouter);
 // app.use('/download', coreDownloadRouter);

@@ -108,19 +108,49 @@ function PosScreen() {
     values: null,
   });
 
-  // const { result, onSubmit, isLoading, isSuccess } = useEntityForm({
+  // const {   result, onSubmit, isLoading, isSuccess } = useEntityForm({
   //   entity,
   //   id,
   //   false,
   // });
 
+  const createRequest = async (data) => {
+    console.log(data)
+    return await request.createAndUpload({
+      entity: 'sales/create',
+      token: token,
+      jsonData: data,
+    });
+  };
+
   async function onSubmit(event){
     try{
       const { cash_received } = event;
-      if( totalCost < parseFloat(cash_received) ){
-        toast.error('Total Cost is less then cash recevied.')
+      
+
+      if( subTotal > parseInt(cash_received)){
+        toast.error("Please enter correct amount.")
+        return;
       }
-      // const response = await request.create()
+
+      const modifiedValues = {
+        ...event,
+        cash_refund: cashRefund,
+        total_cost:totalCost,
+        products: cart
+      }
+
+      const response = await createRequest(modifiedValues);
+
+      if(response.success === true){
+        setCart([]);
+        setTotalCost(0);
+        setDiscount(0);
+        setCashRefund(0);
+        setSubTotal(0);
+        reset();
+      }
+      
     }catch(error){
       console.error(error)
     }
@@ -171,8 +201,6 @@ function PosScreen() {
   }
 
   async function handleIncrement(val,index){
-    console.log(val)
-    console.log(index)
     // const updatedList = [...cart];
 
     // Find the object in the list
@@ -351,7 +379,7 @@ function PosScreen() {
                     className="bg-[#F5F7F9] p-3 text-sm border border-[#E5E5E5] rounded-md w-full outline-none"
                     required={true}
                     maxLength={11}
-                    {...register("phone_number", {
+                    {...register("customer_phoneno", {
                       required: "This field is required",
                       validate: validatePhoneNumber,
                       maxLength:11
