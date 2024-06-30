@@ -12,26 +12,16 @@ import './dashboard.css';
 const DashBoard = ()=> {
 
     return(
-        <div className="flex flex-col h-screen overflow-hidden">
-            <div className='flex-1 grid grid-cols-3 auto-rows-fr'>
-
-                <div className="p-5  col-span-1	row-span-2	flex items-center justify-center"><LineChartBox /></div>
-                <div className="p-5 col-span-1	row-span-2 flex items-center justify-center"><RadicalChartBox text={'Monthly Goal'} value={60}/></div>
-                <div className="p-5 col-span-1	row-span-2 flex items-center justify-center"><RadicalChartBox text={'Yearly Goal'} value={40}/></div>
-
+        <div className="flex flex-col gap-3 h-screen ">
+            <div className='flex-1 grid grid-cols-3 gap-3 pt-4 px-4 auto-rows-fr'>
+                <div className="p-5  col-span-1	bg-white rounded-lg shadow-md row-span-2 flex items-center justify-center"><LineChartBox /></div>
+                <div className="p-5 col-span-1	bg-white rounded-lg shadow-md row-span-2 flex items-center justify-center"><RadicalChartBox text={'Monthly Goal'} value={60}/></div>
+                <div className="p-5 col-span-1	bg-white rounded-lg shadow-md row-span-2 flex items-center justify-center"><RadicalChartBox text={'Yearly Goal'} value={40}/></div>
             </div>
-
-          
-             
-    
-
-            <div className='flex-1 p-2'>
+            <div className='flex-1 p-2 mx-4  bg-white rounded-lg shadow-md'>
 
                 <BarChartBox {...barChartBoxVisit}/>
             </div>
-
-
-            
         </div>
     )
 };
